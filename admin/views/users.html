@@ -1,0 +1,47 @@
+<div class="content">
+  <h1>Users</h1>
+  <table class="table">
+  	<thead>
+  		<th>Username</th>
+  		<th>Name</th>
+      <th>Phone</th>
+      <th>Grants</th>
+  		<th>Admin</th>
+      <th></th>
+  	</thead>
+  	<tbody>
+  		<tr ng-repeat="u in users">
+  			<td>{{ u.username }}</td>
+  			<td>{{ u.name }}</td>
+        <td>{{ u.phone }}</td>
+        <td>{{ u.grants.join(' ') }}</td>
+  			<td><span ng-show="u.admin" class="glyphicon glyphicon-check" aria-hidden="true"></span></td>
+        <td class="actions">
+          <a ng-click="editUser(u)"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+          <a ng-show="u.username!=currentUser()" ng-click="deleteUser(u)" ng-confirm-click="Can't be undone. Are you sure?"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+          <a ng-show="u.phone" ng-click="resetPassword($event, u)" ng-confirm-click="Are you sure you want to reset {{u.name}}'s password? A new password will be sent via text message.">reset password</a>
+        </td>
+  		</tr>
+      <tr>
+        <td>
+          <input ng-model="user.username" placeholder="Username" />
+        </td>
+        <td>
+          <input ng-model="user.name" placeholder="Name" />
+        </td>
+        <td>
+          <input ng-model="user.phone" placeholder="Phone" />
+        </td>
+        <td>
+          <input ng-model="user.grants" ng-list=" " ng-trim="false" placeholder="Grants" />
+        </td>
+        <td>
+          <input type="checkbox" ng-model="user.admin" placeholder="" />
+        </td>
+        <td>
+          <button class="btn btn-default" ng-click="addUser()">Add</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,61 @@
+body {
+    padding-top: 50px;
+}
+
+a {
+	cursor: pointer;
+}
+
+.login {
+	font-size: 20pt;
+    padding: 40px 15px;
+    text-align: center;
+}
+
+.login input {
+	margin-bottom: 15px;
+}
+
+.message {
+	font-size: 15pt;
+	width: 30%;
+	text-align: center;
+	margin-left: auto !important;
+	margin-right: auto !important;
+	background-color: #F0D0D0;
+	border: thin solid #E0E0E0;
+	border-radius: 10px;
+	padding: 5px;
+	margin: 10px 0 10px 0;
+}
+
+.content {
+    padding: 40px 15px;
+}
+
+.actions a {
+	padding: 10px;
+}
+
+.dashboard-metric {
+	text-align: center;
+	display: inline-block;
+	margin-left: 50px;
+	margin-right: 50px;
+	color: grey;
+}
+
+.dashboard-metric-value {
+	font-size: 50pt;
+	color: black;
+	font-weight: bold;
+}
+
+.footer {
+	margin-top: 50px;
+	text-align: center;
+}
+
+.footer > img {
+	width: 500px;
+}

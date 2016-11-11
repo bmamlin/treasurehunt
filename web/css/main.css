@@ -1,0 +1,72 @@
+body {
+    background-color: #fff;
+}
+
+.header {
+	margin-bottom: 50px;
+	text-align: center;
+}
+
+.header > img {
+	width: 500px;
+}
+
+.header h1 {
+	font-size: 40pt;
+	font-weight: bold;
+	color: red;
+	padding-bottom: 20px;
+	border-bottom: thick solid grey;
+}
+
+.footer {
+	margin-top: 20px;
+	border-top: thin solid lightgrey;
+	padding-top: 10px;
+	font-style: italic;
+}
+
+.login {
+	font-size: 10pt;
+    padding: 20px 15px;
+    text-align: center;
+}
+
+.login a, .login a:visited {
+	color: lightgrey;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.login input {
+	margin-bottom: 15px;
+}
+
+.content {
+    padding: 40px 15px;
+}
+
+.achievement {
+	text-align: center;
+	padding: 10px;
+	display: inline-block;
+	width: 200px;
+}
+
+.achieved {
+	opacity: 0.5;
+}
+
+.dashboard-metric {
+	text-align: center;
+	display: inline-block;
+	margin-left: 50px;
+	margin-right: 50px;
+	color: grey;
+}
+
+.dashboard-metric-value {
+	font-size: 50pt;
+	color: black;
+	font-weight: bold;
+}

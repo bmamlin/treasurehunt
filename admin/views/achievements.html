@@ -1,0 +1,42 @@
+<div class="content">
+  <h1>Achievements</h1>
+  <table class="table">
+  	<thead>
+      <th>ID</th>
+  		<th>Name</th>
+  		<th>Description</th>
+      <th>Image</th>
+      <th>URL</th>
+      <th></th>
+  	</thead>
+  	<tbody>
+  		<tr ng-repeat="a in achievements | orderBy:'name'">
+        <td>{{ a.id }}</td>
+  			<td>{{ a.name }}</td>
+        <td>{{ a.description }}</td>
+        <td><img width="100" ng-src="{{ a.image_url }}" ng-show="a.image_url" /></td>
+        <td>{{ a.url }}</td>
+        <td>
+          <a ng-show="isAdmin()" ng-click="deleteAchievement(a)" ng-confirm-click="Can't be undone. Are you sure?"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+        </td>
+  		</tr>
+      <tr ng-show="isAdmin()">
+        <td>
+          <input ng-model="achievement.name" placeholder="name" />
+        </td>
+        <td>
+          <textarea ng-model="achievement.description" placeholder="description"></textarea>
+        </td>
+        <td>
+          <input ng-model="achievement.image_url" placeholder="Image URL" />
+        </td>
+        <td>
+          <input ng-model="achievement.url" placeholder="Bio URL" />
+        </td>
+        <td>
+          <button class="btn btn-default" ng-click="addAchievement()">Add</button>
+        </td>
+      </tr>
+  	</tbody>
+  </table>
+</div>

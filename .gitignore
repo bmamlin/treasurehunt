@@ -1,0 +1,9 @@
+.env
+**/config/
+
+/db
+/util
+
+node_modules
+
+.DS_Store

@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  web:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./web:/usr/share/nginx/html:ro
+
+  admin:
+    image: nginx
+    volumes:
+      - ./admin:/usr/share/nginx/html:ro
+
+  api:
+    build: .
+    volumes:
+      - ./api:/opt/app
+    environment:
+      - NODE_ENV=production
+      - TWILIO_ACCOUNT_SID=$TWILIO_ACCOUNT_SID
+      - TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN
+      - TWILIO_NUMBER=$TWILIO_NUMBER
+      - MONGODB_URI=$MONGODB_URI
+      - LOGGLY_TOKEN=$LOGGLY_TOKEN
+      - LOGGLY_DOMAIN=$LOGGLY_DOMAIN
+
+  db:
+    image: mongo
+    volumes:
+      - ./db:/data/db

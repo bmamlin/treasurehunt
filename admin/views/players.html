@@ -1,0 +1,59 @@
+<div class="content">
+  <h1>Players</h1>
+  <table class="table">
+  	<thead>
+      <th>ID</th>
+  		<th>Name</th>
+      <th>Org</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>URL</th>
+  		<th>Achievements</th>
+      <th>Claimed</th>
+      <th>Disabled</th>
+      <th></th>
+  	</thead>
+  	<tbody>
+  		<tr ng-repeat="p in players">
+        <td><a ng-href="/p/{{p.id}}" target="_blank">{{ p.id }}</a></td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.org }}</td>
+        <td>{{ p.contact.email }}</td>
+        <td>{{ p.contact.phone }}</td>
+        <td>{{ p.url }}</td>
+  			<td>{{ p.achievements.length }}</td>
+        <td><span ng-show="p.active" class="glyphicon glyphicon-check" aria-hidden="true"></span></td>
+        <td><span ng-show="p.disabled" class="glyphicon glyphicon-check" aria-hidden="true"></span></td>
+        <td>
+          <a title="Delete player" ng-click="deletePlayer(p)" ng-confirm-click="Can't be undone. Are you sure?"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+          <a ng-hide="players[$index].disabled" title="Disable player" ng-click="disablePlayer(players[$index])" ng-confirm-click="This will disable player's account. Are you sure?"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a>
+          <a ng-show="players[$index].disabled" title="Enable player" ng-click="enablePlayer(players[$index])"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+        </td>
+  		</tr>
+      <tr>
+        <td></td>
+        <td>
+          <input ng-model="player.name" placeholder="Name" />
+        </td>
+        <td>
+          <input ng-model="player.org" placeholder="Org" />
+        </td>
+        <td>
+          <input ng-model="player.email" placeholder="Email" />
+        </td>
+        <td>
+          <input ng-model="player.phone" placeholder="Phone" />
+        </td>
+        <td>
+          <input ng-model="player.url" placeholder="URL" />
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <button class="btn btn-default" ng-click="addPlayer()">Add</button>
+        </td>
+      </tr>
+  	</tbody>
+  </table>
+</div>

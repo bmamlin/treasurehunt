@@ -1,0 +1,33 @@
+{
+  "name": "treasurehunt",
+  "version": "1.0.0",
+  "description": "Regenstrief Treasure Hunt API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^0.8.7",
+    "body-parser": "^1.13.3",
+    "change-case": "^3.0.0",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.1",
+    "express": "^4.13.3",
+    "halson": "^2.3.1",
+    "jsonwebtoken": "^7.1.9",
+    "loggly": "^1.1.1",
+    "mongodb": "^2.1.6",
+    "mongoose": "^4.6.4",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.1.0",
+    "passport-local": "^1.0.0",
+    "qr-image": "^3.1.0",
+    "require-dir": "^0.3.1",
+    "shortid": "^2.2.6",
+    "twilio": "^2.9.3",
+    "winston": "^2.2.0",
+    "winston-daily-rotate-file": "^1.3.1",
+    "winston-loggly-bulk": "^1.3.3"
+  }
+}
