@@ -1,6 +1,5 @@
 var halson = require('halson');
-var mongoose = require('mongoose');
-var Achievement = mongoose.model('Achievement');
+var Achievement = require('../models/achievement');
 var shortid = require('shortid');
 var logger = require('../log');
 
