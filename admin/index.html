@@ -66,7 +66,7 @@
         <div ng-show="loginMessage" class="message" role="alert">
           {{ loginMessage }}
         </div>
-        <input id="username" type="text" placeholder="username" ng-model="user.username" onFocus="this.select()" show-focus="!isAuthenticated()" /><br />
+        <input id="username" type="text" placeholder="username" ng-model="user.username" onFocus="this.select()" show-focus="!isAuthenticated()" ng-keyup="user.username=user.username.toLowerCase()" /><br />
         <input type="password" placeholder="password" ng-model="user.password" ng-keyup="($event.keyCode == 13) && login()" onFocus="this.select()" /><br />
         <input type="button" value="Log In" ng-click="login()" />
       </div>
