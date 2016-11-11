@@ -12,11 +12,13 @@ services:
       - VIRTUAL_HOST=$DOMAIN
       - LETSENCRYPT_HOST=$DOMAIN
       - LETSENCRYPT_EMAIL=$EMAIL
+    restart: always
 
   admin:
     image: nginx
     volumes:
       - ./admin:/usr/share/nginx/html:ro
+    restart: always
 
   api:
     build: .
@@ -30,11 +32,13 @@ services:
       - MONGODB_URI=$MONGODB_URI
       - LOGGLY_TOKEN=$LOGGLY_TOKEN
       - LOGGLY_DOMAIN=$LOGGLY_DOMAIN
+    restart: always
 
   db:
     image: mongo
     volumes:
       - ./db:/data/db
+    restart: always
 
 networks:
   default:
