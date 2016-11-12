@@ -33,12 +33,10 @@ angular.module('app')
 .controller('PlayerCtrl', ['$scope', '$location', 'AuthService', 'PlayerFactory',
 	function($scope, $location, AuthService, PlayerFactory) {
 
-		/*
-	  if (AuthService.isAuthenticated()) {
-	  	$location.path($location.path() + '/grant');
+	  if (AuthService.isAdmin()) {
+	  	$location.path($location.path() + '/admin');
 	  	return;
 	  }
-	  */
 
 		$scope.player = PlayerFactory.getPlayer;
 		$scope.goals = PlayerFactory.getGoals;
@@ -66,9 +64,42 @@ angular.module('app')
 			return $scope.hasAchieved(goal) ? 'zzz-' : '' + goal.name;
 		};
 
+		$scope.toggleQR = function(e) {
+			console.log(e.target.style);
+		};
+
 		$scope.toggleLoginForm = function() {
 			$scope.showLoginForm = !$scope.showLoginForm;
 		};
 
   }
+])
+
+.controller('AdminCtrl', ['__env', '$scope', '$http', '$location', 'AuthService', 'PlayerFactory',
+	function(__env, $scope, $http, $location, AuthService, PlayerFactory) {
+
+		$scope.player = PlayerFactory.getPlayer;
+		$scope.isAdmin = AuthService.isAdmin;
+
+		$scope.$watch(PlayerFactory.getPlayerId(), function() {
+		  if (!$scope.isAdmin()) {
+		  	console.log(PlayerFactory.getPlayerId());
+		  	$location.path('/'+PlayerFactory.getPlayerId());
+		  }			
+		});
+
+		$scope.submit = function() {
+			var player = $scope.player();
+			var playerInfo = {
+				name: player.name,
+				org: player.org,
+				email: player.email,
+				phone: player.phone
+			};
+			$scope.message = "Saving...";
+			$http.patch(__env.API+'/players/'+$scope.player().id, playerInfo);
+			$scope.message = "Saved";
+		}
+
+	}
 ]);

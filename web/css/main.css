@@ -2,21 +2,50 @@ body {
     background-color: #fff;
 }
 
-.header {
-	margin-bottom: 50px;
+.main-header {
+	margin-bottom: 10px;
 	text-align: center;
 }
 
-.header > img {
-	width: 500px;
+.main-header h1 {
+	font-size: 30pt;
+	font-weight: bold;
+	color: red;
+	padding-bottom: 10px;
+	border-bottom: thick solid grey;
+}
+
+.header {
+	margin-bottom: 20px;
 }
 
 .header h1 {
-	font-size: 40pt;
-	font-weight: bold;
-	color: red;
-	padding-bottom: 20px;
-	border-bottom: thick solid grey;
+	margin: 0;
+	font-size: 15vmin;
+}
+
+.message {
+	font-size: 15pt;
+	width: 30%;
+	text-align: center;
+	margin-left: auto !important;
+	margin-right: auto !important;
+	background-color: #F0D0D0;
+	border: thin solid #E0E0E0;
+	border-radius: 10px;
+	padding: 5px;
+	margin: 10px 0 10px 0;
+}
+
+.qr {
+	width: 80%;
+	max-width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.qr object {
+	width: 100%;
 }
 
 .footer {
@@ -27,7 +56,7 @@ body {
 }
 
 .login {
-	font-size: 10pt;
+	font-size: 12pt;
     padding: 20px 15px;
     text-align: center;
 }
@@ -50,7 +79,7 @@ body {
 	text-align: center;
 	padding: 10px;
 	display: inline-block;
-	width: 200px;
+	width: 150px;
 }
 
 .achieved {
@@ -58,15 +87,30 @@ body {
 }
 
 .dashboard-metric {
+	width: 40%;
+	max-width: 200px;
 	text-align: center;
 	display: inline-block;
-	margin-left: 50px;
-	margin-right: 50px;
+	margin-left: 2%;
+	margin-right: 2%;
 	color: grey;
+}
+
+.dashboard-metric img {
+	width: 80%;
 }
 
 .dashboard-metric-value {
 	font-size: 50pt;
 	color: black;
 	font-weight: bold;
+}
+
+.input-form {
+	font-size: 16pt;
+	width: 90%;
+}
+
+.input-form input {
+	font-size: 18pt;
 }

@@ -38,11 +38,17 @@ a {
 }
 
 .dashboard-metric {
+	width: 40%;
+	max-width: 200px;
 	text-align: center;
 	display: inline-block;
-	margin-left: 50px;
-	margin-right: 50px;
+	margin-left: 2%;
+	margin-right: 2%;
 	color: grey;
+}
+
+.dashboard-metric img {
+	width: 80%;
 }
 
 .dashboard-metric-value {
@@ -57,5 +63,5 @@ a {
 }
 
 .footer > img {
-	width: 500px;
+	width: 95%
 }

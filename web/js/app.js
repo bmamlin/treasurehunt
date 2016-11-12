@@ -16,7 +16,11 @@ app.config(function($routeProvider) {
         controller: 'MainCtrl'
     })
     .when('/:player_id', {
-        templateUrl : 'views/player.html',
+        templateUrl: 'views/player.html',
         controller: 'PlayerCtrl'
+    })
+    .when('/:player_id/admin', {
+        templateUrl: 'views/admin.html',
+        controller: 'AdminCtrl'
     });
 });

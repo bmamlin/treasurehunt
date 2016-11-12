@@ -1,8 +1,5 @@
 <div class="content container-fluid">
-	<div ng-show="player().url" style="float:right">
-		<object ng-attr-data="/api/players/{{player().id}}/qr" type="image/svg+xml" width="100"></object>
-	</div>
-	<div class="page-header">
+	<div class="header">
 	  <h1>{{ player().name || 'No name on file yet' }} <small>{{ player().org }}</small></h1>
 	</div>
 	<div class="intro" ng-hide="isAuthenticated()">
@@ -35,13 +32,18 @@
 		</div>
 	</div>
 
+	<div class="qr" ng-show="player().url">
+		<object ng-attr-data="/api/players/{{player().id}}/qr" type="image/svg+xml"></object>
+	</div>
+
+
 	<div class="login" ng-hide="!showLoginForm || isAuthenticated()">
 		<input type="text" placeholder="username" ng-model="user.username" ng-keyup="(user.username=user.username.toLowerCase()) || ($event.keyCode == 27) && (showLoginForm=false)" onFocus="this.select()" show-focus="showLoginForm && !isAuthenticated()" /><br/>
 		<input type="password" placeholder="password" ng-model="user.password" ng-keyup="(($event.keyCode == 13) && login()) || (($event.keyCode == 27) && (showLoginForm=false))" onFocus="this.select()" /><br/>
 		<input type="button" value="Log In" ng-click="login()" />
 	</div>
 	<div class="login" ng-hide="showLoginForm || isAuthenticated()">
-		<a ng-click="toggleLoginForm()"><small>user login</small></a>
+		<a ng-click="toggleLoginForm()">user login</a>
 	</div>
 
 </div>

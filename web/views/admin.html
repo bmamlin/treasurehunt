@@ -1,0 +1,24 @@
+<div class="content container-fluid">
+	<form ng-show="isAdmin()" class="input-form">
+		<h2>Player Info</h2>
+		<p class="message" ng-show="message" ng-click="message=undefined">{{ message }}</p>
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input type="text" class="form-control" id="name" ng-model="player().name" placeholder="Name" onFocus="this.select()" />
+		</div>
+		<div class="form-group">
+			<label for="org">Organization</label>
+			<input type="text" class="form-control" id="org" ng-model="player().org" placeholder="Organization" onFocus="this.select()" ng-keyup="($event.keyCode == 13) && submit()" />
+		</div>
+		<div class="form-group">
+			<label for="email">Email</label>
+			<input type="text" class="form-control" id="email" ng-model="player().email" placeholder="Email" onFocus="this.select()" ng-keyup="($event.keyCode == 13) && submit()" />
+		</div>
+		<div class="form-group">
+			<label for="phone">Phone</label>
+			<input type="text" class="form-control" id="phone" ng-model="player().phone" placeholder="Phone" onFocus="this.select()" ng-keyup="($event.keyCode == 13) && submit()" />
+		</div>
+		<button type="submit" ng-click="submit()" class="btn btn-default">Submit</button>
+	</form>
+
+</div>
