@@ -75,8 +75,8 @@ angular.module('app')
   };
 }])
 
-.factory('PlayerFactory', ['__env', '$http', '$routeParams', 'AuthService',
-  function(__env, $http, $routeParams, AuthService) {
+.factory('PlayerFactory', ['__env', '$rootScope', '$http', '$routeParams', 'AuthService',
+  function(__env, $rootScope, $http, $routeParams, AuthService) {
 
     var service = {};
     var player_id = $routeParams.player_id;
@@ -94,6 +94,7 @@ angular.module('app')
     }
 
     function loadPlayer() {
+      console.log('load player');
       $http.get(__env.API+'/players/'+player_id).then(function(resp) {
         var thePlayer = resp.data;
         if (user) {
@@ -104,6 +105,9 @@ angular.module('app')
         } else {
           service.setPlayer(thePlayer);
         }
+      }, function(err) {
+        console.log('player not found');
+        $rootScope.$emit('player-not-found');
       });
     }
 
@@ -113,7 +117,7 @@ angular.module('app')
 
     service.getPlayerId = function() {
       return player_id;
-    }
+    };
     service.getPlayer = function() {
       return player;
     };

@@ -30,8 +30,8 @@ angular.module('app')
 ])
 
 
-.controller('PlayerCtrl', ['$scope', '$location', 'AuthService', 'PlayerFactory',
-	function($scope, $location, AuthService, PlayerFactory) {
+.controller('PlayerCtrl', ['$rootScope', '$scope', '$location', 'AuthService', 'PlayerFactory',
+	function($rootScope, $scope, $location, AuthService, PlayerFactory) {
 
 	  if (AuthService.isAdmin()) {
 	  	$location.path($location.path() + '/admin');
@@ -48,6 +48,12 @@ angular.module('app')
 				return 0;
 			}
 		}
+
+		// If player doesn't exist, redirect to root page
+		$rootScope.$on('player-not-found', function() {
+			console.log('redirect to root');
+			$location.path('/');
+		});
 
 		$scope.hasAchieved = function(goal) {
 			function isMatch(value) {
@@ -83,7 +89,6 @@ angular.module('app')
 
 		$scope.$watch(PlayerFactory.getPlayerId(), function() {
 		  if (!$scope.isAdmin()) {
-		  	console.log(PlayerFactory.getPlayerId());
 		  	$location.path('/'+PlayerFactory.getPlayerId());
 		  }			
 		});
