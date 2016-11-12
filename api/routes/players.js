@@ -139,6 +139,8 @@ module.exports = function(app, router, requireAuth) {
         }
         if (typeof req.body.active !== 'undefined') {
           player.active = req.body.active;
+        } else {
+          player.active = true;
         }
         if (typeof req.body.disabled !== 'undefined') {
           player.disabled = req.body.disabled;
@@ -202,53 +204,6 @@ module.exports = function(app, router, requireAuth) {
     })
   });
 
-  // This will handle call to /players/:player_id/contact
-  router.route('/:player_id/contact')
-
-  .get(function(req, res) {
-    // Return player's contact info
-    if (!req.user.admin) {
-      res.status(401);
-      res.setHeader('Content-Type', 'application/vnd.error+json');
-      res.json({ message: 'Not authorized'});
-      return;
-    }
-    res.status(501).send('not implemented');
-  }) 
-
-  .put(function(req, res) {
-    // Update player's contact info
-    if (!req.user.admin) {
-      res.status(401);
-      res.setHeader('Content-Type', 'application/vnd.error+json');
-      res.json({ message: 'Not authorized'});
-      return;
-    }
-    res.status(501).send('not implemented');
-  })
-
-  .patch(function(req, res) {
-    // Patch player's contact info
-    if (!req.user.admin) {
-      res.status(401);
-      res.setHeader('Content-Type', 'application/vnd.error+json');
-      res.json({ message: 'Not authorized'});
-      return;
-    }
-    res.status(501).send('not implemented');
-  })
-
-  .delete(function(req, res) {
-    // Delete player's contact info
-    if (!req.user.admin) {
-      res.status(401);
-      res.setHeader('Content-Type', 'application/vnd.error+json');
-      res.json({ message: 'Not authorized'});
-      return;
-    }
-    res.status(501).send('not implemented');
-  });
-
   // This will handle calls to /players/:player_id/qr
   router.route('/:player_id/qr')
 
@@ -305,6 +260,7 @@ module.exports = function(app, router, requireAuth) {
         }
       }
       player.achievements = playerAchievements;
+      player.active = true;
       return player.save();
     }).then(function(playerWithAchievement) {
       res.status(200);
@@ -355,6 +311,7 @@ module.exports = function(app, router, requireAuth) {
         });
         player.achievements = playerAchievements;
       }
+      player.active = true;
       return player.save();
     }).then(function(playerWithAchievement) {
       res.status(200);
