@@ -82,7 +82,7 @@ angular.module('app')
 		$scope.updatePlayerNameAndOrg = function(newName, newOrg) {
 			$http.patch(
 				__env.API+'/players/'+PlayerFactory.getPlayerId(),
-				{ name: newName, org: newOrg },
+				{ name: newName, org: newOrg }
 			).then(function(resp) {
 				$scope.player().name = newName;
 				$scope.player().org = newOrg;
