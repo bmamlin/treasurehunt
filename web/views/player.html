@@ -12,7 +12,30 @@
 			Awarded
 		</div>
 		<div class="header">
-		  <h1>{{ player().name || 'No name on file yet' }} <small>{{ player().org }}</small></h1>
+			<div ng-show="player().name">
+				<h1>{{ player().name }} <small>{{ player().org }}</small></h1>
+			</div>
+			<div ng-show="!player().name && !isAuthenticated()">
+				<h1>Unknown player <small>{{ player().org }}</small></h1>
+				<h2>Go to the Regenstrief booth and ask them to register your name.</h2>
+			</div>
+			<div ng-show="!player().name && isAuthenticated()">
+			</div>
+		</div>
+		<div ng-show="isAuthenticated() && !player().name">
+			<p>This player's name has not yet been entered. Please help out and record this player's name and organization.</p>
+			<div class="message" ng-show="nameFormError">
+				{{ nameFormError }}
+			</div>
+			<div class="form-group">
+				<label for="newName">Player's Name</label>
+				<input type="text" class="form-control" id="newName" ng-model="newName" placeholder="Name" onFocus="this.select()" />
+			</div>
+			<div class="form-group">
+				<label for="newOrg">Player's Organization</label>
+				<input type="text" class="form-control" id="newOrg" ng-model="newOrg" placeholder="Organization" onFocus="this.select()" />
+			</div>
+			<button class="btn btn-default" ng-click="updatePlayerNameAndOrg(newName, newOrg)">Submit</button>
 		</div>
 		<div class="intro" ng-hide="isAuthenticated()">
 			<p>Welcome to the Regenstrief Treasure Hunt!

@@ -105,12 +105,6 @@ module.exports = function(app, router, requireAuth) {
 
   .patch(requireAuth, function(req, res) {
     // Patch player
-    if (!req.user.admin) {
-      res.status(401);
-      res.setHeader('Content-Type', 'application/vnd.error+json');
-      res.json({ message: 'Not authorized'});
-      return;
-    }
     Player.findOne({
       id: req.params.player_id
     }, function(err, player) {
@@ -131,8 +125,11 @@ module.exports = function(app, router, requireAuth) {
           logger.debug('Player %s org changed to %s',player._id,req.body.org);
           player.org = req.body.org;
         }
-        if (req.body.contact) {
-          player.contact = req.body.contact;
+        if (req.body.phone) {
+          player.phone = req.body.phone;
+        }
+        if (req.body.email) {
+          player.phone = req.body.email;
         }
         if (req.body.achievements) {
           player.achievements = req.body.achievements;
@@ -165,7 +162,8 @@ module.exports = function(app, router, requireAuth) {
                   url: player.url,
                   name: player.name,
                   org: player.org,
-                  contact: player.contact,
+                  email: player.email,
+                  phone: player.phone,
                   achievements: player.achievements,
                   active: player.active,
                   disabled: player.disabled,

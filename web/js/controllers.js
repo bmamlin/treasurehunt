@@ -30,8 +30,8 @@ angular.module('app')
 ])
 
 
-.controller('PlayerCtrl', ['$rootScope', '$scope', '$location', 'AuthService', 'PlayerFactory',
-	function($rootScope, $scope, $location, AuthService, PlayerFactory) {
+.controller('PlayerCtrl', ['$rootScope', '$scope', '$http', '$location', 'AuthService', 'PlayerFactory',
+	function($rootScope, $scope, $http, $location, AuthService, PlayerFactory) {
 
 		$scope.grantedAchievement = PlayerFactory.getGrantedAchievement;
 
@@ -53,7 +53,6 @@ angular.module('app')
 
 		// If player doesn't exist, redirect to root page
 		$rootScope.$on('player-not-found', function() {
-			console.log('redirect to root');
 			$location.path('/');
 		});
 
@@ -79,6 +78,18 @@ angular.module('app')
 		$scope.toggleLoginForm = function() {
 			$scope.showLoginForm = !$scope.showLoginForm;
 		};
+
+		$scope.updatePlayerNameAndOrg = function(newName, newOrg) {
+			$http.patch(
+				__env.API+'/players/'+PlayerFactory.getPlayerId(),
+				{ name: newName, org: newOrg },
+			).then(function(resp) {
+				$scope.player().name = newName;
+				$scope.player().org = newOrg;
+			}, function(err) {
+				$scope.nameFormError = err.message;
+			});
+		}
 
   }
 ])
