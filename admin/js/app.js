@@ -4,8 +4,7 @@ var env = {};
 if(window){  
   Object.assign(env, window.__env);
 }
-
-var app = angular.module('app', ['ngRoute']);
+var app = angular.module('app', ['ngRoute', 'xeditable']);
 
 app.constant('__env', env);
 
@@ -31,4 +30,8 @@ app.config(function($routeProvider) {
         templateUrl : 'views/profile.html',
         controller: 'ProfileCtrl'
     });
+});
+
+app.run(function(editableOptions) {
+  editableOptions.theme = 'bs3';
 });

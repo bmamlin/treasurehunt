@@ -95,6 +95,18 @@ angular.module('app')
 		$scope.currentUser = function() {
 			return AuthService.currentUser();
 		};
+		$scope.updateUserName = function(u) {
+			return $http.patch(__env.API+'/users/'+u.username,
+				{ name: u.name });
+		}
+		$scope.updateUserPhone = function(u) {
+			return $http.patch(__env.API+'/users/'+u.username,
+				{ phone: u.phone });
+		}
+		$scope.updateUserGrants = function(u) {
+			return $http.patch(__env.API+'/users/'+u.username,
+				{ grants: u.grants.split(/[\s,]+/) });
+		}
 	}
 ])
 

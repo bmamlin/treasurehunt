@@ -12,12 +12,11 @@
   	<tbody>
   		<tr ng-repeat="u in users">
   			<td>{{ u.username }}</td>
-  			<td>{{ u.name }}</td>
-        <td>{{ u.phone }}</td>
-        <td>{{ u.grants.join(' ') }}</td>
+  			<td><a href="#" editable-text="u.name" onaftersave="updateUserName(u)">{{ u.name || 'empty' }}</a></td>
+        <td><a href="#" editable-text="u.phone" onaftersave="updateUserPhone(u)">{{ u.phone || 'empty' }}</a></td>
+        <td><a href="#" editable-text="u.grants" ng-hide="u.admin" onaftersave="updateUserGrants(u)">{{ u.grants.join(' ') || 'empty' }}</a></td>
   			<td><span ng-show="u.admin" class="glyphicon glyphicon-check" aria-hidden="true"></span></td>
         <td class="actions">
-          <a ng-click="editUser(u)"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
           <a ng-show="u.username!=currentUser()" ng-click="deleteUser(u)" ng-confirm-click="Can't be undone. Are you sure?"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
           <a ng-show="u.phone" ng-click="resetPassword($event, u)" ng-confirm-click="Are you sure you want to reset {{u.name}}'s password? A new password will be sent via text message.">reset password</a>
         </td>

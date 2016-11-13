@@ -105,14 +105,14 @@ module.exports = function(app, router, requireAuth) {
   })
 
   .patch(requireAuth, function(req, res) {
-    // Patch user to change password
+    // Patch user
     if (req.body.username && !req.user.admin) {
       res.status(401);
       res.setHeader('Content-Type', 'application/vnd.error+json');
       res.json({ message: 'Not authorized'});
       return;
     }
-    if (!req.body.password || !req.body.new_password) {
+    if (req.body.new_password && !req.body.password) {
       res.status(400);
       res.setHeader('Content-Type', 'application/vnd.error+json');
       res.json({ message: 'Changing password requires password, and new_password'});
@@ -122,7 +122,7 @@ module.exports = function(app, router, requireAuth) {
     if (req.user.admin && req.body.username) {
       target_username = req.body.username;
     } else {
-      target_username = req.user.username;
+      target_username = req.params.username;
     }
     User.findOne({username:target_username},function(err, user) {
       if (err) {
@@ -130,21 +130,42 @@ module.exports = function(app, router, requireAuth) {
         res.setHeader('Content-Type', 'application/vnd.error+json');
         res.json({ message: "Failed to update user"});
       } else {
-        user.comparePassword(req.body.password, function(err, isMatch) {
-          if (err || !isMatch) {
-            logger.debug('Password mismatch');
-            logger.debug(err);
-            res.status(400);
-            res.setHeader('Content-Type', 'application/vnd.error+json');
-            res.json({ message: "Incorrect password"});
-          } else {
-            logger.debug('passwords match');
-            user.password = req.body.new_password;
-            user.save();
-            logger.info(user.username + ' created by '+req.user.username);
-            res.status(204).send();
-          }
-        });
+        var userChanged = false;
+        if (req.body.name) {
+          user.name = req.body.name;
+          userChanged = true;
+        }
+        if (typeof req.body.phone !== undefined) {
+          user.phone = req.body.phone;
+          userChanged = true;
+        }
+        if (typeof req.body.phone !== undefined) {
+          user.grants = req.body.grants;
+          userChanged = true;
+        }
+        if (req.body.admin && req.user.admin) {
+          user.admin = req.body.admin;
+          userChanged = true;
+        }
+        if (userChanged) {
+          user.save();
+        }
+        if (req.body.new_password) {
+          user.comparePassword(req.body.password, function(err, isMatch) {
+            if (err || !isMatch) {
+              res.status(400);
+              res.setHeader('Content-Type', 'application/vnd.error+json');
+              res.json({ message: "Incorrect password"});
+            } else {
+              user.password = req.body.new_password;
+              user.save();
+              logger.info(user.username + ' created by '+req.user.username);
+              res.status(204).send();
+            }
+          });
+        } else {
+          res.status(204).send();
+        }
       }
     });
   })
