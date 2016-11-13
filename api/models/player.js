@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var PlayerSchema = new Schema({  
     id: { type: String, required: true },
     url: String,
-    name: { type: String, required: true, trim: true },
+    name: { type: String, trim: true },
     org: String,
     email: String,
     phone: { type:String, trim: true },

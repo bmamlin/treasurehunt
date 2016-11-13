@@ -174,4 +174,9 @@ angular.module('app')
 			});
 	  }
 	}
+])
+
+.controller('StartCtrl', ['__env', '$scope', '$http',
+	function(__env, $scope, $http) {
+	}
 ]);

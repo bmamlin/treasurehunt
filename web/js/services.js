@@ -83,6 +83,7 @@ angular.module('app')
     var player = {};
     var goals = [];
     var user = undefined;
+    var grantedAchievement = false;
 
     if (AuthService.isAuthenticated()) {
       $http.get(__env.API+'/users/'+AuthService.currentUser()).then(function(resp) {
@@ -94,19 +95,18 @@ angular.module('app')
     }
 
     function loadPlayer() {
-      console.log('load player');
       $http.get(__env.API+'/players/'+player_id).then(function(resp) {
         var thePlayer = resp.data;
         if (user) {
           $http.post(__env.API+'/players/'+thePlayer.id+'/achievements', '').then(function(resp) {
             // resp.data should contain player with granted achievements
+            service.setGrantedAchievement(user.name);
             service.setPlayer(resp.data);
           });
         } else {
           service.setPlayer(thePlayer);
         }
       }, function(err) {
-        console.log('player not found');
         $rootScope.$emit('player-not-found');
       });
     }
@@ -129,6 +129,12 @@ angular.module('app')
     };
     service.setGoals = function(newGoals) {
       goals = newGoals;
+    };
+    service.getGrantedAchievement = function() {
+      return grantedAchievement;
+    };
+    service.setGrantedAchievement = function(newGrantedAchievement) {
+      grantedAchievement = newGrantedAchievement;
     };
 
     return service;

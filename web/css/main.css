@@ -30,6 +30,16 @@ body {
 	color: lightgrey;
 }
 
+.granted-banner {
+	color: white;
+	background-color: green;
+	font-weight: bold;
+	font-size: 12pt;
+	text-align: center;
+	padding: 5px;
+	margin-bottom: 20px;
+}
+
 .glyphicon.fast-right-spinner {
     -webkit-animation: glyphicon-spin-r 1s infinite linear;
     animation: glyphicon-spin-r 1s infinite linear;

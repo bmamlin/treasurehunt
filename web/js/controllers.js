@@ -33,6 +33,8 @@ angular.module('app')
 .controller('PlayerCtrl', ['$rootScope', '$scope', '$location', 'AuthService', 'PlayerFactory',
 	function($rootScope, $scope, $location, AuthService, PlayerFactory) {
 
+		$scope.grantedAchievement = PlayerFactory.getGrantedAchievement;
+
 	  if (AuthService.isAdmin()) {
 	  	$location.path($location.path() + '/admin');
 	  	return;

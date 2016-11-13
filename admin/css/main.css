@@ -33,6 +33,13 @@ a {
     padding: 40px 15px;
 }
 
+.tip {
+	border: thin solid lightgrey;
+	border-radius: 10px;
+	padding: 1em;
+	background-color: #FFFFE0;
+}
+
 .actions a {
 	padding: 10px;
 }

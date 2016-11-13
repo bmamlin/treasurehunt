@@ -252,7 +252,6 @@ module.exports = function(app, router, requireAuth) {
           return a.achievement === user.grants[i];
         });
         if (found.length < 1) {
-          logger.info(req.user.username+' granted '+user.grants[i]+' to '+player.id);
           playerAchievements.push({
             achievement: user.grants[i],
             achieved_at: Date.now()
@@ -282,6 +281,7 @@ module.exports = function(app, router, requireAuth) {
       );
       res.send(JSON.stringify(resource));
     }).catch(function(err) {
+      logger.info(JSON.stringify(err));
       res.status(500);
       res.setHeader('Content-Type', 'application/vnd.error+json');
       res.json({ message: app.settings.env === 'development' ?
@@ -389,7 +389,7 @@ module.exports = function(app, router, requireAuth) {
       res.json({ message: 'Not authorized'});
       return;
     }
-    var id = shortid.generate();
+    var id = req.body.id || shortid.generate();
     Player.create({
       id: id,
       url: req.body.url || 'https://treasurehunt.regenstrief.org/p/'+id,

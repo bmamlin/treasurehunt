@@ -135,11 +135,11 @@ module.exports = function(app, router, requireAuth) {
           user.name = req.body.name;
           userChanged = true;
         }
-        if (typeof req.body.phone !== undefined) {
+        if (req.body.phone !== undefined) {
           user.phone = req.body.phone;
           userChanged = true;
         }
-        if (typeof req.body.phone !== undefined) {
+        if (req.body.grants !== undefined) {
           user.grants = req.body.grants;
           userChanged = true;
         }
@@ -219,7 +219,11 @@ module.exports = function(app, router, requireAuth) {
         var newPassword = passphrase();
         user.password = newPassword;
         user.save();
-        sms.send(user.phone, 'Your new treasurehunt password is:\n\n'+newPassword);
+        sms.send(user.phone,
+          'Welcome to the Regenstrief Treasurehunt! ' +
+          'Get started at http://bit.ly/treasurehunt-user\n\n' +
+          'Your treasurehunt username is "' + user.username +
+          '" and your password is:\n\n' + newPassword);
         res.status(200);
         res.json({
           success: true,
@@ -304,7 +308,7 @@ module.exports = function(app, router, requireAuth) {
         if (autoPassword) {
           sms.send(newUser.phone,
             'Welcome to the Regenstrief Treasurehunt! ' +
-            'Get started at http://bit.ly/treasurehunt-help\n\n' +
+            'Get started at http://bit.ly/treasurehunt-user\n\n' +
             'Your treasurehunt username is "' + newUser.username +
             '" and your password is:\n\n' + autoPassword);
         }

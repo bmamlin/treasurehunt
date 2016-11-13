@@ -8,6 +8,9 @@
 	</div>
 
 	<div ng-show="player().id">
+		<div class="granted-banner" ng-show="grantedAchievement()">
+			Awarded
+		</div>
 		<div class="header">
 		  <h1>{{ player().name || 'No name on file yet' }} <small>{{ player().org }}</small></h1>
 		</div>

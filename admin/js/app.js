@@ -29,6 +29,10 @@ app.config(function($routeProvider) {
     .when("/profile", {
         templateUrl : 'views/profile.html',
         controller: 'ProfileCtrl'
+    })
+    .when("/start", {
+        templateUrl : 'views/start.html',
+        controller: 'StartCtrl'
     });
 });
 
