@@ -18,14 +18,14 @@ module.exports = function(app, router, requireAuth) {
         return;
 			}
 			Player.aggregate([
-				{ $project: { count: { $size: "$achievements" } } },
+				{ $project: { count: { $size: { $ifNull: ["$achievements", []] } } } },
 				{ $group:   {_id:null, n: { $sum: "$count" } } }
 			], function(err, numAchieved) {
         res.status(200);
         res.setHeader('Content-Type', 'application/json');
         res.json({
         	num_active_players: numActivePlayers,
-        	num_achieved: numAchieved[0].n
+        	num_achieved: numAchieved && numAchieved[0] ? numAchieved[0].n : 0
         });
 			});
 		});
