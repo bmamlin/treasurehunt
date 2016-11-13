@@ -129,7 +129,7 @@ module.exports = function(app, router, requireAuth) {
           player.phone = req.body.phone;
         }
         if (req.body.email) {
-          player.phone = req.body.email;
+          player.email = req.body.email;
         }
         if (req.body.achievements) {
           player.achievements = req.body.achievements;
