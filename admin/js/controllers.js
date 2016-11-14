@@ -98,21 +98,22 @@ angular.module('app')
 		$scope.updateUserName = function(u) {
 			return $http.patch(__env.API+'/users/'+u.username,
 				{ name: u.name });
-		}
+		};
 		$scope.updateUserPhone = function(u) {
 			return $http.patch(__env.API+'/users/'+u.username,
 				{ phone: u.phone });
-		}
+		};
 		$scope.updateUserGrants = function(u) {
 			return $http.patch(__env.API+'/users/'+u.username,
 				{ grants: u.grants.split(/[\s,]+/) });
-		}
+		};
 	}
 ])
 
 .controller('PlayersCtrl', ['__env', '$scope', '$http',
 	function(__env, $scope, $http) {
 		$scope.player = {};
+		$scope.sortOrder = '-achievements.length'
 		function loadPlayers() {
 			$http.get(__env.API+'/players').then(function(resp) {
 				$scope.players = resp.data;
@@ -139,6 +140,22 @@ angular.module('app')
 			$http.delete(__env.API+'/players/'+p.id).then(function(resp) {
 				loadPlayers();
 			});
+		};
+		$scope.updatePlayerName = function(p) {
+			return $http.patch(__env.API+'/players/'+p.id,
+				{ name: p.name });
+		};
+		$scope.updatePlayerOrg = function(p) {
+			return $http.patch(__env.API+'/players/'+p.id,
+				{ org: p.org });
+		};
+		$scope.updatePlayerEmail = function(p) {
+			return $http.patch(__env.API+'/players/'+p.id,
+				{ email: p.email });
+		};
+		$scope.updatePlayerPhone = function(p) {
+			return $http.patch(__env.API+'/players/'+p.id,
+				{ phone: p.phone });
 		};
 	}
 ])

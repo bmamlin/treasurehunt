@@ -95,9 +95,13 @@ angular.module('app')
     }
 
     function loadPlayer() {
-      $http.get(__env.API+'/players/'+player_id).then(function(resp) {
+      var playerURL = __env.API+'/players/'+player_id;
+      if (user && user.admin) {
+        playerURL = playerURL + '/admin';
+      }
+      $http.get(playerURL).then(function(resp) {
         var thePlayer = resp.data;
-        if (user) {
+        if (user && !user.admin) {
           $http.post(__env.API+'/players/'+thePlayer.id+'/achievements', '').then(function(resp) {
             // resp.data should contain player with granted achievements
             service.setGrantedAchievement(user.name);

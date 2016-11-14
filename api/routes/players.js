@@ -6,6 +6,7 @@ var Achievement = mongoose.model('Achievement');
 var shortid = require('shortid');
 var logger = require('../log');
 var qr = require('qr-image');
+ExtractJwt = require('passport-jwt').ExtractJwt;
 
 module.exports = function(app, router, requireAuth) {
   'use strict';
@@ -121,17 +122,20 @@ module.exports = function(app, router, requireAuth) {
           logger.debug('Player %s name changed to %s',player._id,req.body.name);
           player.name = req.body.name;
         }
-        if (req.body.org) {
+        if (req.body.org != undefined) {
           logger.debug('Player %s org changed to %s',player._id,req.body.org);
           player.org = req.body.org;
         }
-        if (req.body.phone) {
+        if (req.body.phone != undefined) {
+          logger.debug('Player %s phone changed to %s',player._id,req.body.phone);
           player.phone = req.body.phone;
         }
-        if (req.body.email) {
+        if (req.body.email != undefined) {
+          logger.debug('Player %s email changed to %s',player._id,req.body.email);
           player.email = req.body.email;
         }
         if (req.body.achievements) {
+          logger.debug('Player %s achievements changed to %s',player._id,req.body.achievements);
           player.achievements = req.body.achievements;
         }
         if (typeof req.body.active !== 'undefined') {
@@ -202,6 +206,50 @@ module.exports = function(app, router, requireAuth) {
     })
   });
 
+  // This will handle call to /players/:player_id/admin
+  router.route('/:player_id/admin')
+
+  .get(requireAuth, function(req, res) {
+    // Return player including contact info
+    if (!req.user.admin) {
+      res.status(401);
+      res.setHeader('Content-Type', 'application/vnd.error+json');
+      res.json({ message: 'Not authorized'});
+      return;
+    }
+    Player.findOne({id: req.params.player_id}, function(err, player) {
+      if (err) {
+        res.status(500);
+        res.setHeader('Content-Type', 'application/vnd.error+json');
+        res.json({ message: 'Failed to get player'});
+      } else if (player === null) {
+        res.status(404);
+        res.setHeader('Content-Type', 'application/vnd.error+json');
+        res.json({ message: 'Not found'});
+      } else {
+        res.status(200);
+        res.setHeader('Content-Type', 'application/json');
+        var resource = halson({
+          id: player.id,
+          url: player.url,
+          name: player.name,
+          org: player.org,
+          email: player.email,
+          phone: player.phone,
+          achievements: player.achievements,
+          active: player.active,
+          disabled: player.disabled,
+          created_at: player.created_at,
+          updated_at: player.updated_at
+        }).addLink(
+          'self',
+          '/players/' + player.id
+        );
+        res.send(JSON.stringify(resource));        
+      }
+    });
+  });
+
   // This will handle calls to /players/:player_id/qr
   router.route('/:player_id/qr')
 
@@ -246,7 +294,7 @@ module.exports = function(app, router, requireAuth) {
     }).then(function(user) {
       var playerAchievements = player.achievements || [];
       for (var i=0; i < user.grants.length; i++) {
-        var found = playerAchievements.filter(function(a, i) {
+        var found = playerAchievements.filter(function(a, j) {
           return a.achievement === user.grants[i];
         });
         if (found.length < 1) {
@@ -279,7 +327,6 @@ module.exports = function(app, router, requireAuth) {
       );
       res.send(JSON.stringify(resource));
     }).catch(function(err) {
-      logger.info(JSON.stringify(err));
       res.status(500);
       res.setHeader('Content-Type', 'application/vnd.error+json');
       res.json({ message: app.settings.env === 'development' ?
@@ -363,6 +410,8 @@ module.exports = function(app, router, requireAuth) {
             url: players[i].url,
             name: players[i].name,
             org: players[i].org,
+            email: players[i].email,
+            phone: players[i].phone,
             achievements: players[i].achievements,
             active: players[i].active,
             disabled: players[i].disabled,

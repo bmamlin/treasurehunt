@@ -1,27 +1,30 @@
 <div class="content">
   <h1>Players</h1>
+  <div>
+    <input type="text" placeholder="Filter" onselect="this.select()" ng-model="searchText" />
+  </div>
   <table class="table">
   	<thead>
       <th>ID</th>
-  		<th>Name</th>
-      <th>Org</th>
+      <th ng-click="sortOrder='name'">Name<span ng-show="sortOrder=='name'">&nbsp;<span class="glyphicon glyphicon-sort" aria-hidden="true"></span></span></th>
+      <th ng-click="sortOrder='org'">Org<span ng-show="sortOrder=='org'">&nbsp;<span class="glyphicon glyphicon-sort" aria-hidden="true"></span></span></th>
       <th>Email</th>
       <th>Phone</th>
       <th>URL</th>
-  		<th>Achievements</th>
+      <th ng-click="sortOrder='-achievements.length'">Achievements<span ng-show="sortOrder=='-achievements.length'">&nbsp;<span class="glyphicon glyphicon-sort" aria-hidden="true"></span></span></th>
       <th>Claimed</th>
       <th>Disabled</th>
       <th></th>
   	</thead>
   	<tbody>
-  		<tr ng-repeat="p in players">
+  		<tr ng-repeat="p in players | filter:searchText | orderBy:sortOrder">
         <td><a ng-href="/p/{{p.id}}" target="_blank">{{ p.id }}</a></td>
-        <td>{{ p.name }}</td>
-        <td>{{ p.org }}</td>
-        <td>{{ p.email }}</td>
-        <td>{{ p.phone }}</td>
+        <td><a href="#" editable-text="p.name" onaftersave="updatePlayerName(p)">{{ p.name || 'empty' }}</a></td>
+        <td><a href="#" editable-text="p.org" onaftersave="updatePlayerOrg(p)">{{ p.org || 'empty' }}</a></td>
+        <td><a href="#" editable-text="p.email" onaftersave="updatePlayerEmail(p)">{{ p.email || 'empty' }}</a></td>
+        <td><a href="#" editable-text="p.phone" onaftersave="updatePlayerPhone(p)">{{ p.phone || 'empty' }}</a></td>
         <td>{{ p.url }}</td>
-  			<td>{{ p.achievements.length }}</td>
+  			<td><span class="badge">{{ p.achievements.length }}</span></td>
         <td><span ng-show="p.active" class="glyphicon glyphicon-check" aria-hidden="true"></span></td>
         <td><span ng-show="p.disabled" class="glyphicon glyphicon-check" aria-hidden="true"></span></td>
         <td>
