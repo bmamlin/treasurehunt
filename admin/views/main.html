@@ -11,6 +11,7 @@
 	</div>
 	<div>
 		<h2>Top Players</h2>
+		<p>Out of {{ numPlaying }} players with at least one award, here are people who have found more than one treasure.</p>
 		<ol>
 			<li ng-repeat="p in topPlayers | orderBy:'-achievements.length'">
 				<span class="badge">{{ p.achievements.length }}</span>

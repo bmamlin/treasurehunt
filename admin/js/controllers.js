@@ -33,6 +33,7 @@ angular.module('app')
 			$scope.numberAchieved = resp.data.num_achieved;
 		});
 		$http.get(__env.API+'/stats/admin').then(function(resp) {
+			$scope.numPlaying = resp.data.num_playing;
 			$scope.topPlayers = resp.data.top_players;
 		});
 	}
