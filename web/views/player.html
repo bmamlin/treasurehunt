@@ -55,6 +55,11 @@
 			</span>
 			</p>
 		</div>
+		<div class="quick-links" ng-show="isAuthenticated()">
+			<a href="/admin">Dashboard</a> |
+			<a href="/admin/#/start">Help</a> |
+			<a href="/admin/#/profile">Change password</a>
+		</div>
 		<div class="row-fluid">
 			<div class="achievement" ng-repeat="g in goals() | orderBy:goalSorter">
 				<a ng-href="{{g.url}}" target="_blank">

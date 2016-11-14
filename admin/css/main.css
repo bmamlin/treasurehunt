@@ -16,6 +16,11 @@ a {
 	margin-bottom: 15px;
 }
 
+.quick-links {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 .message {
 	font-size: 15pt;
 	width: 30%;
