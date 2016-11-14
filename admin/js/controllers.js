@@ -27,9 +27,13 @@ angular.module('app')
 	function(__env, $scope, $http) {
 		$scope.numberOfPlayers = '?';
 		$scope.numberAchieved = '?';
+		$scope.topPlayers = [];
 		$http.get(__env.API+'/stats').then(function(resp) {
 			$scope.numberOfPlayers = resp.data.num_active_players;
 			$scope.numberAchieved = resp.data.num_achieved;
+		});
+		$http.get(__env.API+'/stats/admin').then(function(resp) {
+			$scope.topPlayers = resp.data.top_players;
 		});
 	}
 ])
