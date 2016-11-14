@@ -10,9 +10,7 @@
       <th ng-click="sortOrder='org'">Org<span ng-show="sortOrder=='org'">&nbsp;<span class="glyphicon glyphicon-sort" aria-hidden="true"></span></span></th>
       <th>Email</th>
       <th>Phone</th>
-      <!--
       <th>URL</th>
-      -->
       <th ng-click="sortOrder='-achievements.length'">Score<span ng-show="sortOrder=='-achievements.length'">&nbsp;<span class="glyphicon glyphicon-sort" aria-hidden="true"></span></span></th>
       <!--
       <th>Claimed</th>
@@ -27,9 +25,7 @@
         <td style="width:100px"><a href="#" editable-text="p.org" onaftersave="updatePlayerOrg(p)">{{ p.org || 'empty' }}</a></td>
         <td><a href="#" editable-text="p.email" onaftersave="updatePlayerEmail(p)">{{ p.email || 'empty' }}</a></td>
         <td><a href="#" editable-text="p.phone" onaftersave="updatePlayerPhone(p)">{{ p.phone || 'empty' }}</a></td>
-        <!--
-        <td>{{ p.url }}</td>
-        -->
+        <td style="width:50px; overflow-x:hidden; text-align:right">{{ p.url }}</td>
   			<td><span class="badge">{{ p.achievements.length }}</span></td>
         <!--
         <td><span ng-show="p.active" class="glyphicon glyphicon-check" aria-hidden="true"></span></td>
