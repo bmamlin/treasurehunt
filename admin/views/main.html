@@ -11,12 +11,12 @@
 	</div>
 	<div>
 		<h2>Top Players</h2>
-		<ul>
+		<ol>
 			<li ng-repeat="p in topPlayers | orderBy:'-achievements.length'">
 				<span class="badge">{{ p.achievements.length }}</span>
 				{{ p.name }}
 			</li>
-		</ul>
+		</ol>
 	</div>
 	<div class="footer">
 		<img src="images/rcbmi_tag.png" />

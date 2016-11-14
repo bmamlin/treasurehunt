@@ -64,6 +64,12 @@ a {
 	font-weight: bold;
 }
 
+.players-table {
+-webkit-column-width: 50px;
+   -moz-column-width: 50px;
+        column-width: 50px;
+}
+
 .footer {
 	margin-top: 50px;
 	text-align: center;

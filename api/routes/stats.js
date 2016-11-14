@@ -11,7 +11,11 @@ module.exports = function(app, router, requireAuth) {
 
   .get(function(req, res) {
     // Return stats
-		Player.count({active: true, disabled: false}, function(err, numActivePlayers) {
+		Player.count({
+      active: true,
+      disabled: false,
+      id: {$ne: 'test'}
+    }, function(err, numActivePlayers) {
 			if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -19,6 +23,7 @@ module.exports = function(app, router, requireAuth) {
         return;
 			}
 			Player.aggregate([
+        { $match:   { id: {$ne: "test"} } },
 				{ $project: { count: { $size: { $ifNull: ["$achievements", []] } } } },
 				{ $group:   {_id:null, n: { $sum: "$count" } } }
 			], function(err, numAchieved) {

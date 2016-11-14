@@ -3,30 +3,38 @@
   <div>
     <input type="text" placeholder="Filter" onselect="this.select()" ng-model="searchText" />
   </div>
-  <table class="table">
+  <table class="table table-hover players-table">
   	<thead>
       <th>ID</th>
       <th ng-click="sortOrder='name'">Name<span ng-show="sortOrder=='name'">&nbsp;<span class="glyphicon glyphicon-sort" aria-hidden="true"></span></span></th>
       <th ng-click="sortOrder='org'">Org<span ng-show="sortOrder=='org'">&nbsp;<span class="glyphicon glyphicon-sort" aria-hidden="true"></span></span></th>
       <th>Email</th>
       <th>Phone</th>
+      <!--
       <th>URL</th>
-      <th ng-click="sortOrder='-achievements.length'">Achievements<span ng-show="sortOrder=='-achievements.length'">&nbsp;<span class="glyphicon glyphicon-sort" aria-hidden="true"></span></span></th>
+      -->
+      <th ng-click="sortOrder='-achievements.length'">Score<span ng-show="sortOrder=='-achievements.length'">&nbsp;<span class="glyphicon glyphicon-sort" aria-hidden="true"></span></span></th>
+      <!--
       <th>Claimed</th>
       <th>Disabled</th>
+      -->
       <th></th>
   	</thead>
   	<tbody>
   		<tr ng-repeat="p in players | filter:searchText | orderBy:sortOrder">
         <td><a ng-href="/p/{{p.id}}" target="_blank">{{ p.id }}</a></td>
         <td><a href="#" editable-text="p.name" onaftersave="updatePlayerName(p)">{{ p.name || 'empty' }}</a></td>
-        <td><a href="#" editable-text="p.org" onaftersave="updatePlayerOrg(p)">{{ p.org || 'empty' }}</a></td>
+        <td style="width:100px"><a href="#" editable-text="p.org" onaftersave="updatePlayerOrg(p)">{{ p.org || 'empty' }}</a></td>
         <td><a href="#" editable-text="p.email" onaftersave="updatePlayerEmail(p)">{{ p.email || 'empty' }}</a></td>
         <td><a href="#" editable-text="p.phone" onaftersave="updatePlayerPhone(p)">{{ p.phone || 'empty' }}</a></td>
+        <!--
         <td>{{ p.url }}</td>
+        -->
   			<td><span class="badge">{{ p.achievements.length }}</span></td>
+        <!--
         <td><span ng-show="p.active" class="glyphicon glyphicon-check" aria-hidden="true"></span></td>
         <td><span ng-show="p.disabled" class="glyphicon glyphicon-check" aria-hidden="true"></span></td>
+        -->
         <td>
           <a title="Delete player" ng-click="deletePlayer(p)" ng-confirm-click="Can't be undone. Are you sure?"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
           <a ng-hide="players[$index].disabled" title="Disable player" ng-click="disablePlayer(players[$index])" ng-confirm-click="This will disable player's account. Are you sure?"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a>
