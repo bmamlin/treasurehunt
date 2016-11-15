@@ -28,6 +28,7 @@ angular.module('app')
 		$scope.numberOfPlayers = '?';
 		$scope.numberAchieved = '?';
 		$scope.topPlayers = [];
+		$scope.achievementsGranted = [];
 		$http.get(__env.API+'/stats').then(function(resp) {
 			$scope.numberOfPlayers = resp.data.num_active_players;
 			$scope.numberAchieved = resp.data.num_achieved;
@@ -35,6 +36,19 @@ angular.module('app')
 		$http.get(__env.API+'/stats/admin').then(function(resp) {
 			$scope.numPlaying = resp.data.num_playing;
 			$scope.topPlayers = resp.data.top_players;
+			var achievementCounts = resp.data.achievement_counts.reduce(function(map, obj) {
+				map[obj.id] = obj.n;
+				return map;
+			}, {});
+			$http.get(__env.API+'/achievements').then(function(resp) {
+				var achievements = resp.data;
+				for (var i=0; i<achievements.length; i++) {
+					$scope.achievementsGranted.push({
+						name: achievements[i].name,
+						n: achievementCounts[achievements[i].id] || 0
+					});
+				}
+			})
 		});
 	}
 ])

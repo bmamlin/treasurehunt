@@ -61,6 +61,16 @@ module.exports = function(app, router, requireAuth) {
       }).exec();
     }).then(function(players) {
       stats.top_players = players;
+      // Fetch number of players with each achievements
+      return Player.aggregate([
+        { $match: { id:{$ne:"test"} } },
+        { $unwind: "$achievements" },
+        { $project: { _id:0, id:"$id", achievement:"$achievements.achievement"} },
+        { $group: { _id: "$achievement", count: { $sum:1 } } },
+        { $project: { _id:0, id:"$_id", n:"$count" } }
+      ]).exec();
+    }).then(function(achievementCounts) {
+      stats.achievement_counts = achievementCounts;
       res.status(200);
       res.setHeader('Content-Type', 'application/json');
       res.json(stats);
