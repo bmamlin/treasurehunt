@@ -202,6 +202,7 @@ angular.module('app')
 				__env.API+'/users/'+AuthService.currentUser(),
 				JSON.stringify(request)
 			).then(function(resp) {
+				$scope.changePasswordMessage = 'Password changed';
 				$scope.currentPassword = undefined;
 				$scope.newPassword = undefined;
 				$scope.confirmPassword = undefined;
