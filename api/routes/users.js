@@ -159,7 +159,6 @@ module.exports = function(app, router, requireAuth) {
             } else {
               user.password = req.body.new_password;
               user.save();
-              logger.info(user.username + ' created by '+req.user.username);
               res.status(204).send();
             }
           });
