@@ -3,6 +3,7 @@
 
 /db
 /util
+/archive
 
 node_modules
 npm-debug.log

@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+
+  admin:
+    restart: always
+
+  api:
+    environment:
+      - NODE_ENV=production
+    restart: always
+
+  db:
+    restart: always
