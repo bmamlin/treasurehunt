@@ -1,9 +1,12 @@
 var halson = require('halson');
 var jwt = require('jsonwebtoken');
 var mongoose = require('mongoose');
+var sanitize = require('mongo-sanitize');
+var uuid = require('uuid/v4');
 var User = mongoose.model('User');
-var Achievement = mongoose.model('Achievement')
-var config = require('../config/main')
+var Achievement = mongoose.model('Achievement');
+var AuthToken = require('../models/authtoken');
+var config = require('../config/main');
 var logger = require('../log');
 
 module.exports = function(app, router, requireAuth) {
@@ -43,9 +46,10 @@ module.exports = function(app, router, requireAuth) {
 
   .post(function(req, res) {
     // Authenticate
-    logger.debug('Authenticating %s', req.body.username);
+    var username = sanitize(req.body.username);
+    logger.debug('Authenticating %s', username);
     User.findOne({
-      username: req.body.username
+      username: username
     }, function(err, user) {
       logger.debug('Found user: %s', JSON.stringify(user));
       if (err) {
@@ -88,5 +92,76 @@ module.exports = function(app, router, requireAuth) {
         });
       }
     });
+  });
+
+  // Handle authentication token generation requests
+  router.route('/token')
+
+  .get(requireAuth, function(req, res) {
+    var authToken = new AuthToken;
+    authToken.id = uuid();
+    authToken.username = req.user.username;
+    authToken.save({id:uuid(), username:req.user.username}, function(err, token) {
+      if (err) {
+        res.status(500);
+        res.setHeader('Content-Type', 'application/vnd.error+json');
+        res.json({ message: 'Unable to generate authentication token'});
+      } else {
+        // TODO: Instead of returning token, we should send it
+        // via SMS (or email)
+
+        res.status(200);
+        res.setHeader('Content-Type', 'application/json');
+        res.json({
+          success: true,
+          token: token.id
+        });
+      }
+    })
+  });
+
+  // Handle authentication tokens
+  router.route('/t/:token')
+
+  .get(function(req, res) {
+    var token = sanitize(req.params.token);
+    logger.debug('Auth token %s', token);
+
+    // Look for token and authenticate if found
+    AuthToken.findOne({id: token}, function(err, authToken) {
+      if (err) {
+        res.status(500);
+        res.setHeader('Content-Type', 'application/vnd.error+json');
+        res.json({ message: 'Unable to find token'});
+      } else if (authToken === null) {
+        res.status(404);
+        res.setHeader('Content-Type', 'application/vnd.error+json');
+        res.json({ message: 'Invalid token'});
+      } else {
+        // Valid authentication token
+        User.findOne({username: authToken.username}, function(err, user) {
+          if (err) {
+            logger.warn('Token with invalid username: %s', authToken.id)
+            res.status(404);
+            res.setHeader('Content-Type', 'application/vnd.error+json');
+            res.json({ message: 'Invalid token'});
+          }
+          // Valid authentication token, return JWT token
+          var token = jwt.sign(user.toObject(),config.secret,{
+            expiresIn: '7 days'
+          });
+          // return the information including token as JSON
+          res.status(200);
+          res.setHeader('Content-Type', 'application/json');
+          res.json({
+            success: true,
+            message: 'Authenticated via token as '+user.username,
+            token: 'JWT '+token,
+            admin: user.admin
+          });
+        });
+      }
+    });
+
   })
 };
