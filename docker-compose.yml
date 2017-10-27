@@ -16,7 +16,7 @@ services:
   admin:
     image: nginx
     volumes:
-      - ./admin:/usr/share/nginx/html:ro
+      - ./admin:/usr/share/nginx/html
 
   api:
     build: .

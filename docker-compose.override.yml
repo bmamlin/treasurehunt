@@ -4,3 +4,7 @@ services:
   web:
     volumes:
       - ./web/js/env.development.js:/usr/share/nginx/html/js/env.js:ro
+
+  admin:
+    volumes:
+      - ./admin/js/env.development.js:/usr/share/nginx/html/js/env.js:ro

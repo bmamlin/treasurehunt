@@ -1,6 +1,7 @@
 .env
 **/config/
 /web/js/env.js
+/admin/js/env.js
 
 /db
 /util
