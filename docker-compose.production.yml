@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  web:
+    volumes:
+      - ./web/js/env.production.js:/usr/share/nginx/html/js/env.js:ro
