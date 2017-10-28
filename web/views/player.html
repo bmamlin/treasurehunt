@@ -14,7 +14,9 @@
 		<div class="header">
 			<div ng-show="player().name">
 				<h1>{{ player().name }}<h1>
-				<h2>{{ player().org }}</h2>
+				<div class="player-org-wrapper">
+					<h2 class="player-org">{{ player().org }}</h2>
+				</div>
 			</div>
 			<div ng-show="!player().name && !isAuthenticated()">
 				<h1>Unknown player <small>{{ player().org }}</small></h1>
