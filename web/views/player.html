@@ -12,12 +12,9 @@
 			Awarded
 		</div>
 		<div class="header">
-			<div ng-show="player().name && !isAuthenticated()">
-				<h1>{{ player().name }} <small>{{ player().org }}</small></h1>
-			</div>
-			<div ng-show="player().name && isAuthenticated()">
-				<h1>{{ player().name }}</h1>
-				<h2 class="player-org">{{ player().org }}</h2>
+			<div ng-show="player().name">
+				<h1>{{ player().name }}<h1>
+				<h2>{{ player().org }}</h2>
 			</div>
 			<div ng-show="!player().name && !isAuthenticated()">
 				<h1>Unknown player <small>{{ player().org }}</small></h1>
