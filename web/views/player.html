@@ -12,8 +12,12 @@
 			Awarded
 		</div>
 		<div class="header">
-			<div ng-show="player().name">
+			<div ng-show="player().name && !isAuthenticated()">
 				<h1>{{ player().name }} <small>{{ player().org }}</small></h1>
+			</div>
+			<div ng-show="player().name && isAuthenticated()">
+				<h1>{{ player().name }}</h1>
+				<h2 class="player-org">{{ player().org }}</h2>
 			</div>
 			<div ng-show="!player().name && !isAuthenticated()">
 				<h1>Unknown player <small>{{ player().org }}</small></h1>
@@ -55,13 +59,11 @@
 			</span>
 			</p>
 		</div>
-		<div class="quick-links" ng-show="isAuthenticated()">
-			<a href="/admin">Dashboard</a> |
-			<a href="/admin/#/start">Help</a> |
-			<a href="/admin/#/profile">Change password</a>
+		<div ng-show="isAuthenticated()">
+			<h2>has found...</h2>
 		</div>
 		<div class="row-fluid">
-			<div class="achievement" ng-repeat="g in goals() | orderBy:goalSorter">
+			<div class="achievement" ng-repeat="g in goals() | orderBy:goalSorter" ng-show="!isAuthenticated() || hasAchieved(g)">
 				<a ng-href="{{g.url}}" target="_blank">
 				<div style="position: relative; left: 0; top: 0;">
 					<img ng-src="{{g.image_url}}" ng-class="hasAchieved(g)?'achieved':''" width="100" style="position: relative; top: 0; left: 0px;"/>
@@ -72,7 +74,7 @@
 			</div>
 		</div>
 
-		<div class="qr" ng-show="player().url">
+		<div class="qr" ng-show="player().url && !isAuthenticated()">
 			<object ng-attr-data="/api/players/{{player().id}}/qr" type="image/svg+xml"></object>
 		</div>
 
@@ -83,6 +85,12 @@
 		</div>
 		<div class="login" ng-hide="showLoginForm || isAuthenticated()">
 			<a ng-click="toggleLoginForm()">user login</a>
+		</div>
+
+		<div class="quick-links" ng-show="isAuthenticated()">
+			<a href="/admin">Dashboard</a> |
+			<a href="/admin/#/start">Help</a> |
+			<a href="/admin/#/profile">Change password</a>
 		</div>
 
 		<div class="rcbmi-tag">
