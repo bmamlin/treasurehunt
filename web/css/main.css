@@ -22,9 +22,10 @@ body {
 .header h1 {
 	margin: 0;
 	font-size: 15vmin;
+	text-align: center;
 }
 
-.player-org-wrapper: {
+.player-org-wrapper {
 	text-align: center;
 }
 
