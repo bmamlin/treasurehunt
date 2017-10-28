@@ -43,18 +43,23 @@
 		<div class="intro" ng-hide="isAuthenticated()">
 			<p>Welcome to the Regenstrief Treasure Hunt!
 			<span ng-show="numAchieved() == 0">
-				Time to start hunting for treasure! Find someone below and have them scan your QR code.</span>
+				Time to start hunting for treasure! Find someone below and have them scan your QR code. Don't be shy. Our 
+				treasures are eager to be found.
+			</span>
 			<span ng-show="numAchieved() > 0 && numAchieved() < 5">
-				You're on your way. Keep hunting for Regenstrief treasures.
+				You're on your way. Keep hunting for Regenstrief treasures. Tap on their 
+				pictures below to learn about our 
+				treasures.
 			</span>
 			<span ng-show="numAchieved() >= 5 && numAchieved() < 15">
-				You've found {{ numAchieved() }} of Regenstrief's treasures.
+				You've found {{ numAchieved() }} of Regenstrief's treasures. You are on 
+				a roll, but we know you can find more!
 			</span>
 			<span ng-show="numAchieved() >= 15 && numAchieved() < 20">
 				You've found {{ numAchieved() }} of Regenstrief's treasures. Impressive!
 			</span>
 			<span ng-show="numAchieved() >= 20">
-			You're clearly a master treasure hunter. Well done!
+				You're clearly a master treasure hunter. Well done!
 			</span>
 			</p>
 		</div>
