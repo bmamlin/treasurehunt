@@ -81,6 +81,7 @@
 			<input type="text" placeholder="username" ng-model="user.username" ng-keyup="(user.username=user.username.toLowerCase()) || ($event.keyCode == 27) && (showLoginForm=false)" onFocus="this.select()" show-focus="showLoginForm && !isAuthenticated()" /><br/>
 			<input type="password" placeholder="password" ng-model="user.password" ng-keyup="(($event.keyCode == 13) && login()) || (($event.keyCode == 27) && (showLoginForm=false))" onFocus="this.select()" /><br/>
 			<input type="button" value="Log In" ng-click="login()" />
+			<a ng-click="toggleLoginForm()">cancel</a>
 		</div>
 		<div class="login" ng-hide="showLoginForm || isAuthenticated()">
 			<a ng-click="toggleLoginForm()">user login</a>
