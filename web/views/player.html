@@ -60,7 +60,7 @@
 			</p>
 		</div>
 		<div ng-show="isAuthenticated()">
-			<h2>has found...</h2>
+			<h3>has found...</h3>
 		</div>
 		<div class="row-fluid">
 			<div class="achievement" ng-repeat="g in goals() | orderBy:goalSorter" ng-show="!isAuthenticated() || hasAchieved(g)">
