@@ -83,3 +83,14 @@ a {
 .footer > img {
 	width: 95%
 }
+
+.granted-banner {
+	width: 300px;
+	color: white;
+	background-color: green;
+	font-weight: bold;
+	font-size: 12pt;
+	text-align: center;
+	padding: 5px;
+	margin-bottom: 20px;
+}
