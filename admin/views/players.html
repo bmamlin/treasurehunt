@@ -1,4 +1,4 @@
-<div class="content">
+<div class="content" ng-show="isAdmin()">
   <h1>Players</h1>
   <div>
     <input type="text" placeholder="Filter" onselect="this.select()" ng-model="searchText" />
@@ -67,4 +67,7 @@
       -->
   	</tbody>
   </table>
+</div>
+<div class="content" ng-show="!isAdmin()">
+  <h1>Access limited to administrators</h1>
 </div>

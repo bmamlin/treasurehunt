@@ -73,8 +73,11 @@ angular.module('app')
 	}
 ])
 
-.controller('AchievementsCtrl', ['__env', '$scope', '$http',
-	function(__env, $scope, $http) {
+.controller('AchievementsCtrl', ['__env', '$scope', '$http', 'AuthService',
+	function(__env, $scope, $http, AuthService) {
+	  $scope.isAdmin = function() {
+	  	return AuthService.isAdmin();
+	  };
 		$scope.achievement = {};
 		function loadAchievements() {
 			$http.get(__env.API+'/achievements').then(function(resp) {
@@ -100,6 +103,9 @@ angular.module('app')
 
 .controller('UsersCtrl', ['__env', '$scope', '$http', 'AuthService',
 	function(__env, $scope, $http, AuthService) {
+	  $scope.isAdmin = function() {
+	  	return AuthService.isAdmin();
+	  };
 		$scope.user = {};
 		function loadUsers() {
 			$http.get(__env.API+'/users').then(function(resp) {
@@ -149,8 +155,11 @@ angular.module('app')
 	}
 ])
 
-.controller('PlayersCtrl', ['__env', '$scope', '$http',
-	function(__env, $scope, $http) {
+.controller('PlayersCtrl', ['__env', '$scope', '$http', 'AuthService',
+	function(__env, $scope, $http, AuthService) {
+	  $scope.isAdmin = function() {
+	  	return AuthService.isAdmin();
+	  };
 		$scope.player = {};
 		$scope.sortOrder = '-achievements.length'
 		function loadPlayers() {
@@ -207,6 +216,9 @@ angular.module('app')
 	  $scope.logout = function() {
 	  	AuthService.logout();
 	  };
+	  $scope.history = function() {
+
+	  }
 	  $scope.changePassword = function() {
 	  	if ($scope.newPassword != $scope.confirmPassword) {
 	  		$scope.changePasswordMessage = 'Passwords do not match';

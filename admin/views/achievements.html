@@ -1,4 +1,4 @@
-<div class="content">
+<div class="content" ng-show="isAdmin()">
   <h1>Achievements</h1>
   <table class="table">
   	<thead>
@@ -40,4 +40,7 @@
       </tr>
   	</tbody>
   </table>
+</div>
+<div class="content" ng-show="!isAdmin()">
+  <h1>Access limited to administrators</h1>
 </div>
