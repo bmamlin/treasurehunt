@@ -94,37 +94,11 @@ module.exports = function(app, router, requireAuth) {
     });
   });
 
-  // Handle authentication token generation requests
+  // Handle authentication tokens
   router.route('/token')
 
-  .get(requireAuth, function(req, res) {
-    var authToken = new AuthToken;
-    authToken.id = uuid();
-    authToken.username = req.user.username;
-    authToken.save({id:uuid(), username:req.user.username}, function(err, token) {
-      if (err) {
-        res.status(500);
-        res.setHeader('Content-Type', 'application/vnd.error+json');
-        res.json({ message: 'Unable to generate authentication token'});
-      } else {
-        // TODO: Instead of returning token, we should send it
-        // via SMS (or email)
-
-        res.status(200);
-        res.setHeader('Content-Type', 'application/json');
-        res.json({
-          success: true,
-          token: token.id
-        });
-      }
-    })
-  });
-
-  // Handle authentication tokens
-  router.route('/t/:token')
-
-  .get(function(req, res) {
-    var token = sanitize(req.params.token);
+  .post(function(req, res) {
+    var token = sanitize(req.body.token);
     logger.debug('Auth token %s', token);
 
     // Look for token and authenticate if found
@@ -156,6 +130,7 @@ module.exports = function(app, router, requireAuth) {
           res.json({
             success: true,
             message: 'Authenticated via token as '+user.username,
+            username: user.username,
             token: 'JWT '+token,
             admin: user.admin
           });

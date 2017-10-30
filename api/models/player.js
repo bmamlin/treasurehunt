@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var PlayerSchema = new Schema({  
-    id: { type: String, required: true },
+    id: { type: String, required: true, unique: true },
     url: String,
     name: { type: String, trim: true },
     org: String,

@@ -20,6 +20,26 @@ angular.module('app')
 	  $scope.isAdmin = function() {
 	  	return AuthService.isAdmin();
 	  };
+
+	  $scope.withAuthToken = function() {
+	  	if ('authToken' in $location.search()) {
+	  		var authToken = $location.search().authToken;
+	  		$location.search({});
+	  		$scope.loginWithToken(authToken);
+	  	} else {
+	  		return false;
+	  	}
+	  }
+
+	  $scope.authToken = $location.search().authToken;
+
+	  $scope.loginWithToken = function(authToken) {
+	    AuthService.loginWithToken(authToken).then(function() {
+	    	$scope.loginMessage = undefined;
+	    }, function(err) {
+	    	$scope.loginMessage = 'Invalid token';
+	    });
+	  };
   }
 ])
 

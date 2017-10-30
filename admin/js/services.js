@@ -30,7 +30,7 @@ angular.module('app')
       admin: credentials.admin
     };
  
-    // Set the token as header for your requests!
+    // Set token as header for requests
     $http.defaults.headers.common.Authorization = auth.token;
   }
  
@@ -60,6 +60,27 @@ angular.module('app')
       });
     });
   };
+
+  var loginWithToken = function(authToken) {
+    return $q(function(resolve, reject) {
+      $http.post(__env.API + '/auth/token', 
+        { "token": authToken }).then(function(result) {
+        if (result.data.success) {
+          var credentials = {
+            token: result.data.token,
+            username: result.data.username,
+            admin: result.data.admin
+          };
+          storeUserCredentials(credentials);
+          resolve(result.data.message);
+        } else {
+          reject(result.data.message);
+        }
+      }, function(err) {
+        reject(err.data.message);
+      });
+    });
+  };
  
   var logout = function() {
     destroyUserCredentials();
@@ -69,6 +90,7 @@ angular.module('app')
  
   return {
     login: login,
+    loginWithToken: loginWithToken,
     logout: logout,
     isAuthenticated: function() {return isAuthenticated;},
     currentUser: function() { return isAuthenticated ?

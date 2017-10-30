@@ -64,7 +64,9 @@
     </nav>
 
     <div class="container">
-
+<div ng-show="withAuthToken()" style="text-align:center; font-size:30pt">
+  authToken = {{ authToken }}
+</div>
       <div class="login" ng-show="!isAuthenticated()">
         <div ng-show="loginMessage" class="message" role="alert">
           {{ loginMessage }}

@@ -1,6 +1,9 @@
 var halson = require('halson');
 var mongoose = require('mongoose');
+var sanitize = require('mongo-sanitize');
+var uuid = require('uuid/v4');
 var User = mongoose.model('User');
+var AuthToken = require('../models/authtoken');
 var logger = require('../log');
 var passphrase = require('../config/passphrase');
 var sms = require('../sms');
@@ -216,13 +219,20 @@ module.exports = function(app, router, requireAuth) {
         return;        
       } else {
         var newPassword = passphrase();
+        var authToken = new AuthToken;
+        authToken.id = uuid();
+        authToken.username = user.username;
+        authToken.save();
         user.password = newPassword;
         user.save();
         sms.send(user.phone,
           'Welcome to the Regenstrief Treasurehunt! ' +
-          'Get started at http://bit.ly/treasurehunt-user\n\n' +
-          'Your treasurehunt username is "' + user.username +
-          '" and your password is:\n\n' + newPassword);
+          'Get started at http://regen.st/treasure\n\n' +
+          'username: ' + user.username + '\n' +
+          'password: ' + newPassword + '\n\n' +
+          'You can bypass login with this secret link:\n\n' +
+          'https://treasurehunt.regenstrief.org' +
+          '/admin/#/start?authToken=' + authToken.id);
         res.status(200);
         res.json({
           success: true,
