@@ -285,7 +285,9 @@ module.exports = function(app, router, requireAuth) {
           { 'username': user.username },
           { 'id': { $ne: authToken.id } }
         ]}, function(err) {
-          logger.error(err);
+          if (err) {
+            logger.error(err);
+          }
         });
         user.password = newPassword;
         user.save();
