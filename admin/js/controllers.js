@@ -149,8 +149,9 @@ angular.module('app')
 				{ phone: u.phone });
 		};
 		$scope.updateUserGrants = function(u) {
+			u.grants = u.grants.split(/[\s,]+/);
 			return $http.patch(__env.API+'/users/'+u.username,
-				{ grants: u.grants.split(/[\s,]+/) });
+				{ grants: u.grants });
 		};
 	}
 ])
