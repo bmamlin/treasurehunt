@@ -4,7 +4,7 @@
 		<a href="/admin">Dashboard</a> |
 		<a href="/admin/#/start">Help</a>
 	</div>
-	<div class="history" ng-show="isAuthenticated()">
+	<div class="history" ng-show="isAuthenticated() && !isAdmin()">
 		<h2>History</h2>
 		<div ng-repeat="h in history">
 			<a href="/#{{ h.id }}" target="_blank">
@@ -13,6 +13,9 @@
 			<span class="timestamp" title="{{ h.achieved_at | date:'short' }}">
 				&ndash; {{ h.achieved_at | date:'EEEE h:mm a' }}
 			</span>
+		</div>
+		<div ng-hide="history.length > 0">
+			No QR codes scanned yet.
 		</div>
 	</div>
 	<div>
