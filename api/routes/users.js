@@ -212,6 +212,7 @@ module.exports = function(app, router, requireAuth) {
           { $match: {"achievements.achievement":{$in:user.grants} } },
           { 
             $project: {
+              "id": "$id",
               "name": "$name",
               "org": "$org",
               "achievements": {
@@ -228,6 +229,7 @@ module.exports = function(app, router, requireAuth) {
           { $limit: 1 },
           {
             $project: {
+              "id": 1,
               "name": 1,
               "org": 1,
               "achieved_at": "$achievements.achieved_at"

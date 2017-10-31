@@ -7,9 +7,11 @@
 	<div class="history" ng-show="isAuthenticated()">
 		<h2>History</h2>
 		<div ng-repeat="h in history">
-			{{ h.name }} ({{ h.org }}) - 
+			<a href="/#{{ h.id }}" target="_blank">
+			{{ h.name }} ({{ h.org }})
+			</a> 
 			<span class="timestamp" title="{{ h.achieved_at | date:'short' }}">
-				{{ h.achieved_at | date:'EEEE h:mm a' }}
+				&ndash; {{ h.achieved_at | date:'EEEE h:mm a' }}
 			</span>
 		</div>
 	</div>
