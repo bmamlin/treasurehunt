@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var sanitize = require('mongo-sanitize');
 var uuid = require('uuid/v4');
 var User = mongoose.model('User');
+var Player = require('../models/player');
 var AuthToken = require('../models/authtoken');
 var logger = require('../log');
 var passphrase = require('../config/passphrase');
@@ -16,13 +17,14 @@ module.exports = function(app, router, requireAuth) {
 
   .get(requireAuth, function(req, res) {
     // Return user
-    if (!req.user.admin && req.user.username != req.params.username) {
+    var username = sanitize(req.params.username);
+    if (!req.user.admin && req.user.username != username) {
       res.status(401);
       res.setHeader('Content-Type', 'application/vnd.error+json');
       res.json({ message: 'Not authorized'});
       return;
     }
-    User.findOne({username: req.params.username}, function(err, user) {
+    User.findOne({username: username}, function(err, user) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -59,15 +61,16 @@ module.exports = function(app, router, requireAuth) {
       res.json({ message: 'Not authorized'});
       return;
     }
+    var username = sanitize(req.params.username);
     User.update({
-      id: req.params.username
+      id: username
     }, {
-      username: req.params.username,
-      name: req.body.name,
-      phone: req.body.phone,
-      grants: req.body.grants,
+      username: username,
+      name: sanitize(req.body.name),
+      phone: sanitize(req.body.phone),
+      grants: sanitize(req.body.grants),
       password: req.body.password || passphrase(),
-      admin: req.body.admin || false
+      admin: sanitize(req.body.admin) || false
     }, {
       upsert: true
     }, function(err, raw) {
@@ -79,13 +82,13 @@ module.exports = function(app, router, requireAuth) {
             err.message : 'Failed to update user'
         });
       } else {
-        User.findOne({username: req.params.username}, function(err, user) {
+        User.findOne({username: username}, function(err, user) {
           if (err) {
             res.status(500);
             res.setHeader('Content-Type', 'application/vnd.error+json');
             res.json({ message: "Failed to get user"});
           } else {
-            logger.info(req.params.username+' updated by '+req.user.username);
+            logger.info(username+' updated by '+req.user.username);
             res.status(200);
             res.setHeader('Content-Type', 'application/json');
             var resource = halson({
@@ -180,16 +183,68 @@ module.exports = function(app, router, requireAuth) {
       res.json({ message: 'Not authorized'});
       return;
     }
-    User.find({username:req.params.username}).remove(function(err) {
+    var username = sanitize(req.params.username);
+    User.find({username:username}).remove(function(err) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
         res.json({ message: 'Failed to remove user'});
       } else {
-        logger.info(req.params.username+' deleted by '+req.user.username);
+        logger.info(username+' deleted by '+req.user.username);
         res.status(204).send();
       }
     })
+  });
+
+  // This will handle calls to /users/:username/history
+  router.route('/:username/history')
+
+  .get(requireAuth, function(req, res) {
+    // Return history of grants by current user
+
+    User.findOne({username:req.user.username},function(err, user) {
+      if (err) {
+        res.status(500);
+        res.setHeader('Content-Type', 'application/vnd.error+json');
+        res.json({ message: "Failed to find user"});
+      } else {
+        Player.aggregate(
+          { $match: {"achievements.achievement":{$in:user.grants} } },
+          { 
+            $project: {
+              "name": "$name",
+              "org": "$org",
+              "achievements": {
+                $filter: {
+                  input: "$achievements",
+                  as: "item",
+                  cond: { $setIsSubset: [["$$item.achievement"], user.grants] }
+                }
+              }
+            }
+          },
+          { $unwind: "$achievements" },
+          { $sort: { "achievements.achieved_at": 1 } },
+          { $limit: 1 },
+          {
+            $project: {
+              "name": 1,
+              "org": 1,
+              "achieved_at": "$achievements.achieved_at"
+            }
+          },
+          function(err, players) {
+            res.status(200);
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(players));
+          }
+        );
+      }
+    });
+
+    // TODO: find all players granted current user's achievement
+    //res.status(501).send(); // not implemented yet
+
   });
 
   // This will handle calls to /users/:username/reset

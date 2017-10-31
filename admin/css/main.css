@@ -95,3 +95,7 @@ a {
 	padding: 5px;
 	margin-bottom: 20px;
 }
+
+.timestamp {
+	color: lightgrey;
+}

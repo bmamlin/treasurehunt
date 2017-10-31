@@ -216,9 +216,16 @@ angular.module('app')
 	  $scope.logout = function() {
 	  	AuthService.logout();
 	  };
-	  $scope.history = function() {
-
+	  $scope.history = [];
+	  function loadHistory() {
+	  	$http.get(__env.API+'/users/'+$scope.username()+'/history')
+	  	.then(function(resp) {
+	  		$scope.history = resp.data;
+	  	}, function(err) {
+	  		console.log("Unable to get history for " + $scope.username());
+	  	});
 	  }
+	  loadHistory();
 	  $scope.changePassword = function() {
 	  	if ($scope.newPassword != $scope.confirmPassword) {
 	  		$scope.changePasswordMessage = 'Passwords do not match';

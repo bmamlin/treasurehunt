@@ -4,6 +4,15 @@
 		<a href="/admin">Dashboard</a> |
 		<a href="/admin/#/start">Help</a>
 	</div>
+	<div class="history" ng-show="isAuthenticated()">
+		<h2>History</h2>
+		<div ng-repeat="h in history">
+			{{ h.name }} ({{ h.org }}) - 
+			<span class="timestamp" title="{{ h.achieved_at | date:'short' }}">
+				{{ h.achieved_at | date:'EEEE h:mm a' }}
+			</span>
+		</div>
+	</div>
 	<div>
 		<h2>Logout</h2>
 		<button class="btn btn-default" ng-click="logout()">Logout</button>
