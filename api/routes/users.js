@@ -86,7 +86,7 @@ module.exports = function(app, router, requireAuth) {
           if (err) {
             res.status(500);
             res.setHeader('Content-Type', 'application/vnd.error+json');
-            res.json({ message: "Failed to get user"});
+            res.json({ message: 'Failed to get user'});
           } else {
             logger.info(username+' updated by '+req.user.username);
             res.status(200);
@@ -134,7 +134,7 @@ module.exports = function(app, router, requireAuth) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
-        res.json({ message: "Failed to update user"});
+        res.json({ message: 'Failed to update user'});
       } else {
         var userChanged = false;
         if (req.body.name) {
@@ -161,7 +161,7 @@ module.exports = function(app, router, requireAuth) {
             if (err || !isMatch) {
               res.status(400);
               res.setHeader('Content-Type', 'application/vnd.error+json');
-              res.json({ message: "Incorrect password"});
+              res.json({ message: 'Incorrect password'});
             } else {
               user.password = req.body.new_password;
               user.save();
@@ -206,33 +206,33 @@ module.exports = function(app, router, requireAuth) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
-        res.json({ message: "Failed to find user"});
+        res.json({ message: 'Failed to find user'});
       } else {
         Player.aggregate(
-          { $match: {"achievements.achievement":{$in:user.grants} } },
+          { $match: {'achievements.achievement':{$in:user.grants} } },
           { 
             $project: {
-              "id": "$id",
-              "name": "$name",
-              "org": "$org",
-              "achievements": {
+              'id': '$id',
+              'name': '$name',
+              'org': '$org',
+              'achievements': {
                 $filter: {
-                  input: "$achievements",
-                  as: "item",
-                  cond: { $setIsSubset: [["$$item.achievement"], user.grants] }
+                  input: '$achievements',
+                  as: 'item',
+                  cond: { $setIsSubset: [['$$item.achievement'], user.grants] }
                 }
               }
             }
           },
-          { $unwind: "$achievements" },
-          { $sort: { "achievements.achieved_at": 1 } },
+          { $unwind: '$achievements' },
+          { $sort: { 'achievements.achieved_at': 1 } },
           { $limit: 1 },
           {
             $project: {
-              "id": 1,
-              "name": 1,
-              "org": 1,
-              "achieved_at": "$achievements.achieved_at"
+              'id': 1,
+              'name': 1,
+              'org': 1,
+              'achieved_at': '$achievements.achieved_at'
             }
           },
           function(err, players) {
@@ -280,6 +280,13 @@ module.exports = function(app, router, requireAuth) {
         authToken.id = uuid();
         authToken.username = user.username;
         authToken.save();
+        // Limit user to one auth token
+        AuthToken.remove({ $and: [
+          { 'username': user.username },
+          { 'id': { $ne: authToken.id } }
+        ]}, function(err) {
+          logger.error(err);
+        });
         user.password = newPassword;
         user.save();
         sms.send(user.phone,
