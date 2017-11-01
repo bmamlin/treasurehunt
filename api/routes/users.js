@@ -9,6 +9,23 @@ var logger = require('../log');
 var passphrase = require('../config/passphrase');
 var sms = require('../sms');
 
+function generateAuthToken(username) {
+  var authToken = new AuthToken;
+  authToken.id = uuid();
+  authToken.username = username;
+  authToken.save();
+  // Limit user to one auth token
+  AuthToken.remove({ $and: [
+    { 'username': username },
+    { 'id': { $ne: authToken.id } }
+  ]}, function(err) {
+    if (err) {
+      logger.error(err);
+    }
+  });
+  return authToken.id;
+}
+
 module.exports = function(app, router, requireAuth) {
   'use strict';
 
@@ -193,6 +210,14 @@ module.exports = function(app, router, requireAuth) {
         logger.info(username+' deleted by '+req.user.username);
         res.status(204).send();
       }
+    });
+    // Clear out any authentication tokens for the user
+    AuthToken.find({username:username}).remove(function(err) {
+      if (err) {
+        logger.error('Error trying to clear auth tokens for '+username);
+      } else {
+        logger.info('Cleared auth tokens for '+username);
+      }
     })
   });
 
@@ -244,9 +269,6 @@ module.exports = function(app, router, requireAuth) {
       }
     });
 
-    // TODO: find all players granted current user's achievement
-    //res.status(501).send(); // not implemented yet
-
   });
 
   // This will handle calls to /users/:username/reset
@@ -276,21 +298,9 @@ module.exports = function(app, router, requireAuth) {
         return;        
       } else {
         var newPassword = passphrase();
-        var authToken = new AuthToken;
-        authToken.id = uuid();
-        authToken.username = user.username;
-        authToken.save();
-        // Limit user to one auth token
-        AuthToken.remove({ $and: [
-          { 'username': user.username },
-          { 'id': { $ne: authToken.id } }
-        ]}, function(err) {
-          if (err) {
-            logger.error(err);
-          }
-        });
         user.password = newPassword;
         user.save();
+        var authToken = generateAuthToken(user.username);
         sms.send(user.phone,
           'Welcome to the Regenstrief Treasurehunt! ' +
           'Get started at http://regen.st/treasure\n\n' +
@@ -298,7 +308,7 @@ module.exports = function(app, router, requireAuth) {
           'password: ' + newPassword + '\n\n' +
           'You can bypass login with this secret link:\n\n' +
           'https://treasurehunt.regenstrief.org' +
-          '/admin/#/start?authToken=' + authToken.id);
+          '/admin/#/start?authToken=' + authToken);
         res.status(200);
         res.json({
           success: true,
@@ -381,11 +391,16 @@ module.exports = function(app, router, requireAuth) {
         res.json({ message: 'Failed to save user'});
       } else {
         if (autoPassword) {
+          var authToken = generateAuthToken(newUser.username);
           sms.send(newUser.phone,
             'Welcome to the Regenstrief Treasurehunt! ' +
-            'Get started at http://bit.ly/treasurehunt-user\n\n' +
-            'Your treasurehunt username is "' + newUser.username +
-            '" and your password is:\n\n' + autoPassword);
+            'Get started at http://regen.st/treasure\n\n' +
+            'username: ' + newUser.username + '\n' +
+            'password: ' + autoPassword + '\n\n' +
+            'You can bypass login with this secret link:\n\n' +
+            'https://treasurehunt.regenstrief.org' +
+            '/admin/#/start?authToken=' + authToken);
+
         }
         res.status(201);
         res.setHeader('Content-Type', 'application/json');
