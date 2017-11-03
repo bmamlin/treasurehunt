@@ -1,2 +1,2 @@
 # treasurehunt
-Treasure Hunt Game created for Regenstrief at AMIA 2016
+Treasure Hunt Game created for Regenstrief at AMIA
