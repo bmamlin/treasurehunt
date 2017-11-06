@@ -18,14 +18,34 @@ angular.module('app')
   }
 ])
 
-.controller('MainCtrl', ['$scope', '$http',
-	function($scope, $http) {
+.controller('MainCtrl', ['$scope', '$http', '$interval',
+	function($scope, $http, $interval) {
 		$scope.numberOfPlayers = '?';
 		$scope.numberAchieved = '?';
-		$http.get(__env.API+'/stats').then(function(resp) {
-			$scope.numberOfPlayers = resp.data.num_active_players;
-			$scope.numberAchieved = resp.data.num_achieved;
+
+		var updater;
+		$scope.update = function() {
+			if (angular.isDefined(updater)) return;
+			var updateStats = function() {
+				console.log("updating");
+				$http.get(__env.API+'/stats').then(function(resp) {
+					$scope.numberOfPlayers = resp.data.num_active_players;
+					$scope.numberAchieved = resp.data.num_achieved;
+				})
+			};
+			updateStats();
+			updater = $interval(updateStats, __env.MAIN_UPDATE_INTERVAL);
+		};
+
+		$scope.$on('$destroy', function() {
+			if (angular.isDefined(updater)) {
+				$interval.cancel(updater);
+				updater = undefined;
+			}
 		});
+
+		console.log("in controller");
+		$scope.update();
 	}
 ])
 
