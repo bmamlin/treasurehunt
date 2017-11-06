@@ -251,7 +251,6 @@ module.exports = function(app, router, requireAuth) {
           },
           { $unwind: '$achievements' },
           { $sort: { 'achievements.achieved_at': 1 } },
-          { $limit: 1 },
           {
             $project: {
               'id': 1,
