@@ -27,7 +27,6 @@ angular.module('app')
 		$scope.update = function() {
 			if (angular.isDefined(updater)) return;
 			var updateStats = function() {
-				console.log("updating");
 				$http.get(__env.API+'/stats').then(function(resp) {
 					$scope.numberOfPlayers = resp.data.num_active_players;
 					$scope.numberAchieved = resp.data.num_achieved;
@@ -44,7 +43,6 @@ angular.module('app')
 			}
 		});
 
-		console.log("in controller");
 		$scope.update();
 	}
 ])

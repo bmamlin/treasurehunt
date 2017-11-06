@@ -43,33 +43,62 @@ angular.module('app')
   }
 ])
 
-.controller('DashboardCtrl', ['__env', '$scope', '$http',
-	function(__env, $scope, $http) {
+.controller('DashboardCtrl', ['__env', '$scope', '$http', '$interval',
+	function(__env, $scope, $http, $interval) {
 		$scope.numberOfPlayers = '?';
 		$scope.numberAchieved = '?';
 		$scope.topPlayers = [];
 		$scope.achievementsGranted = [];
-		$http.get(__env.API+'/stats').then(function(resp) {
-			$scope.numberOfPlayers = resp.data.num_active_players;
-			$scope.numberAchieved = resp.data.num_achieved;
+
+		var updater;
+		$scope.update = function() {
+			if (angular.isDefined(updater)) return;
+			var updateStats = function() {
+				$http.get(__env.API+'/stats').then(function(resp) {
+					$scope.numberOfPlayers = resp.data.num_active_players;
+					$scope.numberAchieved = resp.data.num_achieved;
+				});
+				$http.get(__env.API+'/stats/admin').then(function(resp) {
+					$scope.numPlaying = resp.data.num_playing;
+					$scope.topPlayers = resp.data.top_players;
+					var achievementCounts = resp.data.achievement_counts.reduce(function(map, obj) {
+						map[obj.id] = obj.n;
+						return map;
+					}, {});
+					$http.get(__env.API+'/achievements').then(function(resp) {
+						var achievements = resp.data;
+						for (var i=0; i<achievements.length; i++) {
+							var obj = $scope.achievementsGranted.find(function (a) {
+								return a.name === achievements[i].name;
+							});
+							if (angular.isDefined(obj)) {
+								var pos = $scope.achievementsGranted.indexOf(obj);
+								$scope.achievementsGranted[pos] = {
+									name: achievements[i].name,
+									n: achievementCounts[achievements[i].id] || 0
+								};
+							} else {
+								$scope.achievementsGranted.push({
+									name: achievements[i].name,
+									n: achievementCounts[achievements[i].id] || 0
+								});
+							}
+						}
+					})
+				});
+			};
+			updateStats();
+			updater = $interval(updateStats, __env.STATS_UPDATE_INTERVAL);
+		};
+
+		$scope.$on('$destroy', function() {
+			if (angular.isDefined(updater)) {
+				$interval.cancel(updater);
+				updater = undefined;
+			}
 		});
-		$http.get(__env.API+'/stats/admin').then(function(resp) {
-			$scope.numPlaying = resp.data.num_playing;
-			$scope.topPlayers = resp.data.top_players;
-			var achievementCounts = resp.data.achievement_counts.reduce(function(map, obj) {
-				map[obj.id] = obj.n;
-				return map;
-			}, {});
-			$http.get(__env.API+'/achievements').then(function(resp) {
-				var achievements = resp.data;
-				for (var i=0; i<achievements.length; i++) {
-					$scope.achievementsGranted.push({
-						name: achievements[i].name,
-						n: achievementCounts[achievements[i].id] || 0
-					});
-				}
-			})
-		});
+
+		$scope.update();
 	}
 ])
 
