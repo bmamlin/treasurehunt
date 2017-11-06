@@ -250,7 +250,7 @@ module.exports = function(app, router, requireAuth) {
             }
           },
           { $unwind: '$achievements' },
-          { $sort: { 'achievements.achieved_at': 1 } },
+          { $sort: { 'achievements.achieved_at': -1 } },
           {
             $project: {
               'id': 1,
