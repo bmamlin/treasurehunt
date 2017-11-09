@@ -1,5 +1,6 @@
 var halson = require('halson');
 var Achievement = require('../models/achievement');
+var sanitize = require('mongo-sanitize');
 var shortid = require('shortid');
 var logger = require('../log');
 
@@ -11,8 +12,9 @@ module.exports = function(app, router, requireAuth) {
 
   .get(function(req, res) {
     // Return achievement
-    logger.debug('Searching for achievement: %s', req.params.id);
-    Achievement.findOne({id: req.params.id}, function(err, achievement) {
+    var id = sanitize(req.params.id);
+    logger.debug('Searching for achievement: %s', id);
+    Achievement.findOne({id: id}, function(err, achievement) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -49,14 +51,15 @@ module.exports = function(app, router, requireAuth) {
       res.json({ message: 'Not authorized'});
       return;
     }
+    var id = sanitize(req.params.id);
     Achievement.update({
-      id: req.params.id
+      id: id
     }, {
-      id: req.params.id,
-      name: req.body.name,
-      description: req.body.description,
-      image_url: req.body.image_url,
-      url: req.body.url
+      id: id,
+      name: sanitize(req.body.name),
+      description: sanitize(req.body.description),
+      image_url: sanitize(req.body.image_url),
+      url: sanitize(req.body.url)
     }, {
       upsert: true
     }, function(err, raw) {
@@ -65,7 +68,8 @@ module.exports = function(app, router, requireAuth) {
         res.setHeader('Content-Type', 'application/vnd.error+json');
         res.json({ message: "Failed to update achievement"});
       } else {
-        Achievement.findOne({id: req.params.id}, function(err, achievement) {
+        var id = sanitize(req.params.id);
+        Achievement.findOne({id: id}, function(err, achievement) {
           if (err) {
             res.status(500);
             res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -100,8 +104,9 @@ module.exports = function(app, router, requireAuth) {
       res.json({ message: 'Not authorized'});
       return;
     }
+    var id = sanitize(req.params.id);
     Achievement.findOne({
-      id: req.params.id
+      id: id
     }, function(err, achievement) {
       if (err) {
         res.status(500);
@@ -110,16 +115,16 @@ module.exports = function(app, router, requireAuth) {
       } else {
         if (req.body.name) {
           logger.debug('Achievement %s name changed to %s',achievement._id,req.body.name);
-          achievement.name = req.body.name;
+          achievement.name = sanitize(req.body.name);
         }
         if (req.body.description) {
-          achievement.description = req.body.description;
+          achievement.description = sanitize(req.body.description);
         }
         if (req.body.image_url) {
-          achievement.image_url = req.body.image_url;
+          achievement.image_url = sanitize(req.body.image_url);
         }
         if (req.body.url) {
-          achievement.url = req.body.url;
+          achievement.url = sanitize(req.body.url);
         }
         Achievement.update({_id:achievement._id},achievement,function(err, raw) {
           if (err) {
@@ -128,7 +133,7 @@ module.exports = function(app, router, requireAuth) {
             res.json({ message: "Failed to update achievement"});
           } else {
             logger.debug("Response from mongo: %s", JSON.stringify(raw));
-            Achievement.findOne({id: req.params.id}, function(err, achievement) {
+            Achievement.findOne({id: id}, function(err, achievement) {
               if (err) {
                 res.status(500);
                 res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -165,8 +170,9 @@ module.exports = function(app, router, requireAuth) {
       res.json({ message: 'Not authorized'});
       return;
     }
-    logger.debug('Deleting achievement %s', req.params.id);
-    Achievement.find({id:req.params.id}).remove(function(err) {
+    var id = sanitize(req.params.id);
+    logger.debug('Deleting achievement %s', id);
+    Achievement.find({id:id}).remove(function(err) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -222,10 +228,10 @@ module.exports = function(app, router, requireAuth) {
     }
     Achievement.create({
       id: shortid.generate(),
-      name: req.body.name,
-      description: req.body.description,
-      image_url: req.body.image_url,
-      url: req.body.url
+      name: sanitize(req.body.name),
+      description: sanitize(req.body.description),
+      image_url: sanitize(req.body.image_url),
+      url: sanitize(req.body.url)
     }, function(err, newAchievement) {
       if (err) {
         res.status(500);

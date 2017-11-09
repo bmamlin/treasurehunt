@@ -143,9 +143,9 @@ module.exports = function(app, router, requireAuth) {
     }
     var target_username;
     if (req.user.admin && req.body.username) {
-      target_username = req.body.username;
+      target_username = sanitize(req.body.username);
     } else {
-      target_username = req.params.username;
+      target_username = sanitize(req.params.username);
     }
     User.findOne({username:target_username},function(err, user) {
       if (err) {
@@ -155,19 +155,19 @@ module.exports = function(app, router, requireAuth) {
       } else {
         var userChanged = false;
         if (req.body.name) {
-          user.name = req.body.name;
+          user.name = sanitize(req.body.name);
           userChanged = true;
         }
         if (req.body.phone !== undefined) {
-          user.phone = req.body.phone;
+          user.phone = sanitize(req.body.phone);
           userChanged = true;
         }
         if (req.body.grants !== undefined) {
-          user.grants = req.body.grants;
+          user.grants = sanitize(req.body.grants);
           userChanged = true;
         }
         if (req.body.admin && req.user.admin) {
-          user.admin = req.body.admin;
+          user.admin = sanitize(req.body.admin);
           userChanged = true;
         }
         if (userChanged) {
@@ -275,13 +275,14 @@ module.exports = function(app, router, requireAuth) {
   
   .get(requireAuth, function(req, res) {
     // Reset user password
+    var username = sanitize(req.params.username);
     if (!req.user.admin) {
       res.status(401);
       res.setHeader('Content-Type', 'application/vnd.error+json');
       res.json({ message: 'Not authorized'});
       return;
     }
-    User.findOne({username: req.params.username}, function(err, user) {
+    User.findOne({username: username}, function(err, user) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -377,12 +378,12 @@ module.exports = function(app, router, requireAuth) {
       return;
     }
     User.create({
-      username: req.body.username,
-      name: req.body.name,
-      phone: req.body.phone,
-      grants: req.body.grants,
+      username: sanitize(req.body.username),
+      name: sanitize(req.body.name),
+      phone: sanitize(req.body.phone),
+      grants: sanitize(req.body.grants),
       password: req.body.password || autoPassword,
-      admin: req.body.admin
+      admin: sanitize(req.body.admin)
     }, function(err, newUser) {
       if (err) {
         res.status(500);

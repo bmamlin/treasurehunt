@@ -2,6 +2,7 @@ var halson = require('halson');
 var Player = require('../models/player');
 var User = require('../models/user');
 var mongoose = require('mongoose');
+var sanitize = require('mongo-sanitize');
 var Achievement = mongoose.model('Achievement');
 var shortid = require('shortid');
 var logger = require('../log');
@@ -16,7 +17,8 @@ module.exports = function(app, router, requireAuth) {
 
   .get(function(req, res) {
     // Return player
-    Player.findOne({id: req.params.player_id}, function(err, player) {
+    var playerId = sanitize(req.params.playerId);
+    Player.findOne({id: playerId}, function(err, player) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -55,17 +57,18 @@ module.exports = function(app, router, requireAuth) {
       res.json({ message: 'Not authorized'});
       return;
     }
+    var playerId = sanitize(req.params.player_id);
     Player.update({
-      id: req.params.player_id
+      id: playerId
     }, {
-      id: req.body.id || req.params.player_id,
-      url: req.body.url,
-      name: req.body.name,
-      org: req.body.org,
-      contact: req.body.contact || {},
-      achievements: req.body.achievements || [],
-      active: typeof req.body.active !== 'undefined' ? req.body.active : true,
-      disabled: typeof req.body.disabled !== 'undefined' ? req.body.disabled : false
+      id: sanitize(req.body.id) || playerId,
+      url: sanitize(req.body.url),
+      name: sanitize(req.body.name),
+      org: sanitize(req.body.org),
+      contact: sanitize(req.body.contact) || {},
+      achievements: sanitize(req.body.achievements) || [],
+      active: typeof req.body.active !== 'undefined' ? sanitize(req.body.active) : true,
+      disabled: typeof req.body.disabled !== 'undefined' ? sanitize(req.body.disabled) : false
     }, {
       upsert: true
     }, function(err, raw) {
@@ -74,7 +77,7 @@ module.exports = function(app, router, requireAuth) {
         res.setHeader('Content-Type', 'application/vnd.error+json');
         res.json({ message: 'Failed to update player'});
       } else {
-        Player.findOne({id: req.params.player_id}, function(err, player) {
+        Player.findOne({id: playerId}, function(err, player) {
           if (err) {
             res.status(500);
             res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -106,8 +109,9 @@ module.exports = function(app, router, requireAuth) {
 
   .patch(requireAuth, function(req, res) {
     // Patch player
+    var playerId = sanitize(req.params.player_id);
     Player.findOne({
-      id: req.params.player_id
+      id: playerId
     }, function(err, player) {
       if (err) {
         res.status(500);
@@ -116,35 +120,35 @@ module.exports = function(app, router, requireAuth) {
       } else {
         if (req.body.url) {
           logger.debug('Player %s url changed to %s',player._id,req.body.name);
-          player.url = req.body.url;
+          player.url = sanitize(req.body.url);
         }
         if (req.body.name) {
           logger.debug('Player %s name changed to %s',player._id,req.body.name);
-          player.name = req.body.name;
+          player.name = sanitize(req.body.name);
         }
         if (req.body.org != undefined) {
           logger.debug('Player %s org changed to %s',player._id,req.body.org);
-          player.org = req.body.org;
+          player.org = sanitize(req.body.org);
         }
         if (req.body.phone != undefined) {
           logger.debug('Player %s phone changed to %s',player._id,req.body.phone);
-          player.phone = req.body.phone;
+          player.phone = sanitize(req.body.phone);
         }
         if (req.body.email != undefined) {
           logger.debug('Player %s email changed to %s',player._id,req.body.email);
-          player.email = req.body.email;
+          player.email = sanitize(req.body.email);
         }
         if (req.body.achievements) {
           logger.debug('Player %s achievements changed to %s',player._id,req.body.achievements);
-          player.achievements = req.body.achievements;
+          player.achievements = sanitize(req.body.achievements);
         }
         if (typeof req.body.active !== 'undefined') {
-          player.active = req.body.active;
+          player.active = sanitize(req.body.active);
         } else {
           player.active = true;
         }
         if (typeof req.body.disabled !== 'undefined') {
-          player.disabled = req.body.disabled;
+          player.disabled = sanitize(req.body.disabled);
         }
         Player.update({_id:player._id},player,function(err, raw) {
           if (err) {
@@ -153,7 +157,7 @@ module.exports = function(app, router, requireAuth) {
             res.json({ message: 'Failed to update player'});
           } else {
             logger.debug('Response from mongo: %s', JSON.stringify(raw));
-            Player.findOne({id: req.params.player_id}, function(err, player) {
+            Player.findOne({id: playerId}, function(err, player) {
               if (err) {
                 res.status(500);
                 res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -194,8 +198,9 @@ module.exports = function(app, router, requireAuth) {
       res.json({ message: 'Not authorized'});
       return;
     }
-    logger.debug('Deleting player %s', req.params.player_id);
-    Player.find({id:req.params.player_id}).remove(function(err) {
+    var playerId = sanitize(req.params.player_id);
+    logger.debug('Deleting player %s', playerId);
+    Player.find({id:playerId}).remove(function(err) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -217,7 +222,8 @@ module.exports = function(app, router, requireAuth) {
       res.json({ message: 'Not authorized'});
       return;
     }
-    Player.findOne({id: req.params.player_id}, function(err, player) {
+    var playerId = sanitize(req.params.player_id);
+    Player.findOne({id: playerId}, function(err, player) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -255,8 +261,9 @@ module.exports = function(app, router, requireAuth) {
 
   .get(function(req, res) {
     // Fetch player and generate their QR code
-    logger.debug('fetching qr code for player '+req.params.player_id);
-    Player.findOne({id: req.params.player_id}, function(err, player) {
+    var playerId = sanitize(req.params.player_id);
+    logger.debug('fetching qr code for player '+playerId);
+    Player.findOne({id: playerId}, function(err, player) {
       if (err) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
@@ -287,7 +294,8 @@ module.exports = function(app, router, requireAuth) {
 
   .post(requireAuth, function(req, res) {
     var player;
-    Player.findOne({id:req.params.player_id}).exec()
+    var playerId = sanitize(req.params.player_id);
+    Player.findOne({id:playerId}).exec()
     .then(function(thePlayer) {
       player = thePlayer;
       return User.findOne({username:req.user.username}).exec();
@@ -339,10 +347,12 @@ module.exports = function(app, router, requireAuth) {
 
   .post(requireAuth, function(req, res) {
     var player;
-    Player.findOne({id:req.params.player_id}).exec()
+    var playerId = sanitize(req.params.player_id);
+    Player.findOne({id:playerId}).exec()
     .then(function(thePlayer) {
       player = thePlayer;
-      return Achievement.findOne({id:req.params.achievement_id}).exec();
+      var achievementId = sanitize(req.params.achievement_id);
+      return Achievement.findOne({id:achievementId}).exec();
     }).then(function(achievement) {
       var playerAchievements = player.achievements || [];
       var found = playerAchievements.filter(function(a) {
@@ -436,14 +446,14 @@ module.exports = function(app, router, requireAuth) {
       res.json({ message: 'Not authorized'});
       return;
     }
-    var id = req.body.id || shortid.generate();
+    var id = sanitize(req.body.id) || shortid.generate();
     Player.create({
       id: id,
-      url: req.body.url || 'https://treasurehunt.regenstrief.org/p/'+id,
-      name: req.body.name,
-      org: req.body.org,
-      phone: req.body.phone,
-      email: req.body.email,
+      url: sanitize(req.body.url) || 'https://treasurehunt.regenstrief.org/p/'+id,
+      name: sanitize(req.body.name),
+      org: sanitize(req.body.org),
+      phone: sanitize(req.body.phone),
+      email: sanitize(req.body.email),
       achievements: [],
       active: true
     }, function(err, newPlayer) {
