@@ -10,7 +10,7 @@
       <th></th>
   	</thead>
   	<tbody>
-  		<tr ng-repeat="u in users">
+  		<tr ng-repeat="u in users | orderBy:'name'">
   			<td>{{ u.username }}</td>
   			<td><a href="#" editable-text="u.name" onaftersave="updateUserName(u)">{{ u.name || 'empty' }}</a></td>
         <td><a href="#" editable-text="u.phone" onaftersave="updateUserPhone(u)">{{ u.phone || 'empty' }}</a></td>
