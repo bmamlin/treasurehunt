@@ -17,7 +17,7 @@ module.exports = function(app, router, requireAuth) {
 
   .get(function(req, res) {
     // Return player
-    var playerId = sanitize(req.params.playerId);
+    var playerId = sanitize(req.params.player_id);
     Player.findOne({id: playerId}, function(err, player) {
       if (err) {
         res.status(500);
