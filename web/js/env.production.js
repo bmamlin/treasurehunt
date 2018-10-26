@@ -10,5 +10,5 @@
   // Interval stats on main page should update (milliseconds)
   window.__env.MAIN_UPDATE_INTERVAL = 30000;
 
-  window.__env.debug = true;
+  window.__env.debug = false;
 }(this));

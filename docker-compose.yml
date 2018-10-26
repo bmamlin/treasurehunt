@@ -32,6 +32,6 @@ services:
       - LOGGLY_DOMAIN=$LOGGLY_DOMAIN
 
   db:
-    image: mongo
+    image: mongo:3.4.10
     volumes:
       - ./db:/data/db
