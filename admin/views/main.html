@@ -22,7 +22,7 @@
 	<div>
 		<h2>Faculty Activity</h2>
 		<ol>
-			<li ng-repeat="a in achievementsGranted | orderBy:'-n'">
+			<li ng-repeat="a in achievementsGranted | orderBy:['-n','name']">
 				<span class="badge">{{ a.n }}</span>
 				{{ a.name }}
 			</li>
