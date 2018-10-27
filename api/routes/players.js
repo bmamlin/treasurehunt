@@ -82,6 +82,10 @@ module.exports = function(app, router, requireAuth) {
             res.status(500);
             res.setHeader('Content-Type', 'application/vnd.error+json');
             res.json({ message: 'Failed to get player'});
+          } else if (player === null) {
+            res.status(404);
+            res.setHeader('Content-Type', 'application/vnd.error+json');
+            res.json({ message: 'Not found'});
           } else {
             res.status(200);
             res.setHeader('Content-Type', 'application/json');
@@ -117,6 +121,10 @@ module.exports = function(app, router, requireAuth) {
         res.status(500);
         res.setHeader('Content-Type', 'application/vnd.error+json');
         res.json({ message: 'Unable to find player'});
+      } else if (player === null) {
+        res.status(404);
+        res.setHeader('Content-Type', 'application/vnd.error+json');
+        res.json({ message: 'Not found'});
       } else {
         if (req.body.url) {
           logger.debug('Player %s url changed to %s',player._id,req.body.name);

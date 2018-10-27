@@ -138,4 +138,33 @@ angular.module('app')
 		}
 
 	}
+])
+
+.controller('DashboardCtrl', ['$scope', '$http', '$interval',
+	function($scope, $http, $interval) {
+		$scope.numberOfPlayers = '?';
+		$scope.numberAchieved = '?';
+
+		var updater;
+		$scope.update = function() {
+			if (angular.isDefined(updater)) return;
+			var updateStats = function() {
+				$http.get(__env.API+'/stats').then(function(resp) {
+					$scope.numberOfPlayers = resp.data.num_active_players;
+					$scope.numberAchieved = resp.data.num_achieved;
+				})
+			};
+			updateStats();
+			updater = $interval(updateStats, __env.MAIN_UPDATE_INTERVAL);
+		};
+
+		$scope.$on('$destroy', function() {
+			if (angular.isDefined(updater)) {
+				$interval.cancel(updater);
+				updater = undefined;
+			}
+		});
+
+		$scope.update();
+	}
 ]);

@@ -15,6 +15,10 @@ app.config(function($routeProvider) {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
     })
+    .when('/dashboard', {
+        templateUrl: 'views/dashboard.html',
+        controller: 'DashboardCtrl'
+    })
     .when('/:player_id', {
         templateUrl: 'views/player.html',
         controller: 'PlayerCtrl'
