@@ -22,8 +22,9 @@
 			<ul>
 				<li ng-repeat="event in recentAchievements">
 					#{{ numberAchieved - $index }} {{ event.name }} ({{ event.org }}) found {{ event.achievement }}
-					<span class="dashboard-feed-timestamp">
-						{{ event.achieved_at | date:'hh:mm:ss' }}
+					<span class="dashboard-feed-timestamp" 
+					      title="{{ event.achieved_at | date:'medium' }}">
+						&ndash; {{ event.achieved_at | date:'hh:mm:ss' }}
 					</span>
 				</li>
 			</ul>

@@ -25,6 +25,12 @@ body {
 	text-align: center;
 }
 
+@media (max-width: 479px) {
+	.rules {
+		clear: both;
+	}
+}
+
 .player-org-wrapper {
 	text-align: center;
 }
@@ -161,6 +167,13 @@ body {
 	float: left;
 }
 
+@media (max-width: 479px) {
+	.dashboard-metrics {
+		width: 100%;
+		float: none;
+	}
+}
+
 .dashboard-metric {
 	width: 40%;
 	max-width: 200px;
@@ -186,17 +199,20 @@ body {
 	float: right;
 }
 
+@media (max-width: 479px) {
+	.dashboard-feed {
+		clear: both;
+		float: none;
+		width: 100%;
+	}
+}
+
 .dashboard-feed li {
 	font-size: 15pt;
 }
 
 .dashboard-feed-timestamp {
-	background-color: #DDD;
-	font-size: 8pt;
-	vertical-align: middle;
-	font-style: italic;
-	border-radius: 3pt;
-	padding: 3pt;
+	color: lightgrey;
 }
 
 .dashboard-content .clear {
