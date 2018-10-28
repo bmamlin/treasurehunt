@@ -50,6 +50,10 @@ a {
 	padding: 10px;
 }
 
+.dashboard-metrics {
+	text-align: center;
+}
+
 .dashboard-metric {
 	width: 40%;
 	max-width: 200px;

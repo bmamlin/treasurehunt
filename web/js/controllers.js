@@ -144,6 +144,7 @@ angular.module('app')
 	function($scope, $http, $interval) {
 		$scope.numberOfPlayers = '?';
 		$scope.numberAchieved = '?';
+		$scope.recentAchievements = [];
 
 		var updater;
 		$scope.update = function() {
@@ -152,6 +153,7 @@ angular.module('app')
 				$http.get(__env.API+'/stats').then(function(resp) {
 					$scope.numberOfPlayers = resp.data.num_active_players;
 					$scope.numberAchieved = resp.data.num_achieved;
+					$scope.recentAchievements = resp.data.recent_achievements;
 				})
 			};
 			updateStats();

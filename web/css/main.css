@@ -155,8 +155,10 @@ body {
 	opacity: 0.5;
 }
 
-.metrics {
+.dashboard-metrics {
 	text-align: center;
+	width: 45%;
+	float: left;
 }
 
 .dashboard-metric {
@@ -177,6 +179,32 @@ body {
 	font-size: 50pt;
 	color: black;
 	font-weight: bold;
+}
+
+.dashboard-feed {
+	width: 45%;
+	float: right;
+}
+
+.dashboard-feed li {
+	font-size: 15pt;
+}
+
+.dashboard-feed-timestamp {
+	background-color: #DDD;
+	font-size: 8pt;
+	vertical-align: middle;
+	font-style: italic;
+	border-radius: 3pt;
+	padding: 3pt;
+}
+
+.dashboard-content .clear {
+	clear: both;
+}
+
+.dashboard-feed ul {
+	list-style: none;
 }
 
 .input-form {

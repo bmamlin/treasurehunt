@@ -19,15 +19,17 @@
 	<p>
 		To join the treasure hunt, visit Regenstrief's booth and enroll. It's easy! Once you have enrolled, you can scan your own QR code or use the provided short link to track your progress.
 	</p>
-	<div class="dashboard-metric">
-    	<img src="images/person.png" /><br/>
-    	<p class="dashboard-metric-value">{{ numberOfPlayers }}</p>
-    	<p>active players</p>
-	</div>
-	<div class="dashboard-metric">
-		<img src="images/trophy.png" /><br/>
-		<p class="dashboard-metric-value">{{ numberAchieved }}</p>
-		<p>found treasures</p>
+	<div class="dashboard-metrics">
+		<div class="dashboard-metric">
+    		<img src="images/person.png" /><br/>
+    		<p class="dashboard-metric-value">{{ numberOfPlayers }}</p>
+    		<p>active players</p>
+		</div>
+		<div class="dashboard-metric">
+			<img src="images/trophy.png" /><br/>
+			<p class="dashboard-metric-value">{{ numberAchieved }}</p>
+			<p>found treasures</p>
+		</div>
 	</div>
 	<h2>Rules of the Game</h2>
 	<ul>

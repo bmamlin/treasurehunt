@@ -5,17 +5,30 @@
 	</div>
 	<div class="announcement">
 	</div>
-	<div class="metrics">
-		<div class="dashboard-metric">
-	    	<img src="images/person.png" /><br/>
-	    	<p class="dashboard-metric-value">{{ numberOfPlayers }}</p>
-	    	<p>active players</p>
+	<div class="dashboard-content">
+		<div class="dashboard-metrics">
+			<div class="dashboard-metric">
+		    	<img src="images/person.png" /><br/>
+		    	<p class="dashboard-metric-value">{{ numberOfPlayers }}</p>
+		    	<p>active players</p>
+			</div>
+			<div class="dashboard-metric">
+				<img src="images/trophy.png" /><br/>
+				<p class="dashboard-metric-value">{{ numberAchieved }}</p>
+				<p>found treasures</p>
+			</div>
 		</div>
-		<div class="dashboard-metric">
-			<img src="images/trophy.png" /><br/>
-			<p class="dashboard-metric-value">{{ numberAchieved }}</p>
-			<p>found treasures</p>
+		<div class="dashboard-feed">
+			<ul>
+				<li ng-repeat="event in recentAchievements">
+					#{{ numberAchieved - $index }} {{ event.name }} ({{ event.org }}) found {{ event.achievement }}
+					<span class="dashboard-feed-timestamp">
+						{{ event.achieved_at | date:'hh:mm:ss' }}
+					</span>
+				</li>
+			</ul>
 		</div>
+		<div class="clear"></div>
 	</div>
 	<div class="footer">
 		<a href="https://twitter.com/regenstrief"><img width="30" src="images/Twitter_Logo_Blue.png" /></a> @Regenstrief #treasurehunt 
