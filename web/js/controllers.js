@@ -18,8 +18,8 @@ angular.module('app')
   }
 ])
 
-.controller('MainCtrl', ['$scope', '$http', '$interval',
-	function($scope, $http, $interval) {
+.controller('MainCtrl', ['$scope', '$http', '$interval', '$location',
+	function($scope, $http, $interval, $location) {
 		$scope.numberOfPlayers = '?';
 		$scope.numberAchieved = '?';
 
@@ -42,6 +42,12 @@ angular.module('app')
 				updater = undefined;
 			}
 		});
+
+		$scope.loadDashboard = function($event) {
+			if ($event.shiftKey) {
+				$location.path('/dashboard');
+			}
+		}
 
 		$scope.update();
 	}
