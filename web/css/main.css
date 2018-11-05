@@ -15,6 +15,10 @@ body {
 	border-bottom: thick solid grey;
 }
 
+.main-header h1.dashboard-header {
+	font-size: 50pt;
+}
+
 .header {
 	margin-bottom: 20px;
 }
