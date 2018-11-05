@@ -308,7 +308,8 @@ module.exports = function(app, router, requireAuth) {
           'password: ' + newPassword + '\n\n' +
           'You can bypass login with this secret link:\n\n' +
           'https://treasurehunt.regenstrief.org' +
-          '/admin/#/start?authToken=' + authToken);
+          '/admin/#/' + (user.admin ? '' : 'start') +
+          '?authToken=' + authToken);
         res.status(200);
         res.json({
           success: true,
@@ -399,7 +400,8 @@ module.exports = function(app, router, requireAuth) {
             'password: ' + autoPassword + '\n\n' +
             'You can bypass login with this secret link:\n\n' +
             'https://treasurehunt.regenstrief.org' +
-            '/admin/#/start?authToken=' + authToken);
+            '/admin/#/' + (newUser.admin ? '' : 'start') +
+            '?authToken=' + authToken);
 
         }
         res.status(201);
