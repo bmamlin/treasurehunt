@@ -80,6 +80,11 @@ angular.module('app')
 			$location.path('/');
 		});
 
+		$rootScope.$on('auth-not-authenticated', function() {
+			AuthService.logout();
+			window.location.href = '/admin';
+		});
+
 		$scope.hasAchieved = function(goal) {
 			function isMatch(value) {
 				return value && goal && value.achievement === goal.id;

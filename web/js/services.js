@@ -89,6 +89,8 @@ angular.module('app')
       $http.get(__env.API+'/users/'+AuthService.currentUser()).then(function(resp) {
         user = resp.data;
         loadPlayer();
+      }, function(err) {
+        $rootScope.$emit('auth-not-authenticated');
       });      
     } else {
       loadPlayer();

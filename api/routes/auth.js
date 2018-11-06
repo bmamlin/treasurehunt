@@ -70,7 +70,7 @@ module.exports = function(app, router, requireAuth) {
             // if user is found and password is right
             // create a token
             var token = jwt.sign(user.toObject(),config.secret,{
-              expiresIn: '7 days'
+              expiresIn: '30 days'
             });
             // return the information including token as JSON
             res.status(200);
@@ -122,7 +122,7 @@ module.exports = function(app, router, requireAuth) {
           }
           // Valid authentication token, return JWT token
           var token = jwt.sign(user.toObject(),config.secret,{
-            expiresIn: '7 days'
+            expiresIn: '30 days'
           });
           // return the information including token as JSON
           res.status(200);
